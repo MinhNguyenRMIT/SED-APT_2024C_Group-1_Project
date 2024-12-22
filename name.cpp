@@ -29,7 +29,7 @@ private:
    time_t startDate,endDate;
 
 public:
-    item(string itemName=""){}
+    item(string itemName="",string category="",string description="",string highestBidder=""):itemName(itemName),category(category),description(description),highestBidder(highestBidder){}
     ~item();
 };
 
