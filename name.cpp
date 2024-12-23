@@ -21,27 +21,3 @@ public:
     member(int creditPoint=0,int rating=0):creditPoint(creditPoint),rating(rating){}
     member();
 };
-class item
-{
-private:
-   string itemName,category,description,highestBidder;
-   int startingBid, currentBid,minBuyerRating;
-   time_t startDate,endDate;
-
-public:
-    item(string itemName="",string category="",string description="",string highestBidder=""):itemName(itemName),category(category),description(description),highestBidder(highestBidder){}
-    ~item();
-};
-
-item::item(/* args */)
-{
-}
-
-item::~item()
-{
-}
-
-
-
-int main(){
-}
