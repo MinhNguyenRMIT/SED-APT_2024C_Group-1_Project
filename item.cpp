@@ -14,10 +14,4 @@ public:
     ~item();
 };
 
-item::item(/* args */)
-{
-}
-
-item::~item()
-{
-}
+void showItemName(){};
