@@ -14,4 +14,6 @@ public:
     ~item();
 };
 
-void showItemName(){};
+void updateListing(){};
+void addBid(){};
+void concludeAuttion(){};
