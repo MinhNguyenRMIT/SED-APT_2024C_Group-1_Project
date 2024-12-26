@@ -16,4 +16,4 @@ public:
 
 void updateListing(){};
 void addBid(){};
-void concludeAuttion(){};
+void concludeAuction(){};
