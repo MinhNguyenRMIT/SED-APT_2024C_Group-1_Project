@@ -6,5 +6,9 @@
         "ostream": "cpp",
         "iosfwd": "cpp",
         "*.tcc": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "Minh",
+        "minhnguyen"
+    ]
 }
