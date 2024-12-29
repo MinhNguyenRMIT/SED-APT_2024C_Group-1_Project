@@ -174,120 +174,120 @@ class User
 
 //TEST MAIN
 
-int main() {
-    vector<User> users; // store registered users
+// int main() {
+//     vector<User> users; // store registered users
 
-    // Load users 
-    ifstream inFile("users.txt");
-    if (inFile) {
-        string line, uname, pwd, fname, mail, id;
-        int phone, rate, credits;
-        while (getline(inFile, line)) {
-            stringstream ss(line);
-            getline(ss, uname, ',');
-            getline(ss, pwd, ',');
-            getline(ss, fname, ',');
-            ss >> phone;
-            ss.ignore(); 
-            getline(ss, mail, ',');
-            getline(ss, id, ',');
-            ss >> rate;
-            ss.ignore(); 
-            ss >> credits;
+//     // Load users 
+//     ifstream inFile("users.txt");
+//     if (inFile) {
+//         string line, uname, pwd, fname, mail, id;
+//         int phone, rate, credits;
+//         while (getline(inFile, line)) {
+//             stringstream ss(line);
+//             getline(ss, uname, ',');
+//             getline(ss, pwd, ',');
+//             getline(ss, fname, ',');
+//             ss >> phone;
+//             ss.ignore(); 
+//             getline(ss, mail, ',');
+//             getline(ss, id, ',');
+//             ss >> rate;
+//             ss.ignore(); 
+//             ss >> credits;
 
-            users.emplace_back(uname, pwd, fname, phone, mail, id, rate, credits);
-        }
-        inFile.close();
-    } else {
-        cout << "No existing user data found. Starting fresh.\n";
-    }
+//             users.emplace_back(uname, pwd, fname, phone, mail, id, rate, credits);
+//         }
+//         inFile.close();
+//     } else {
+//         cout << "No existing user data found. Starting fresh.\n";
+//     }
 
-    User currentUser;
-    bool isLoggedIn = false;
+//     User currentUser;
+//     bool isLoggedIn = false;
 
-    while (true) {
-        cout << "\n--- User Menu ---\n";
-        if (!isLoggedIn) {
-            cout << "1. Register\n";
-            cout << "2. Login\n";
-            cout << "0. Exit\n";
-        } else {
-            cout << "1. View Profile\n";
-            cout << "2. Update Profile\n";
-            cout << "3. Logout\n";
-            cout << "0. Exit\n";
-        }
+//     while (true) {
+//         cout << "\n--- User Menu ---\n";
+//         if (!isLoggedIn) {
+//             cout << "1. Register\n";
+//             cout << "2. Login\n";
+//             cout << "0. Exit\n";
+//         } else {
+//             cout << "1. View Profile\n";
+//             cout << "2. Update Profile\n";
+//             cout << "3. Logout\n";
+//             cout << "0. Exit\n";
+//         }
 
-        int choice;
-        cout << "Enter your choice: ";
-        cin >> choice;
+//         int choice;
+//         cout << "Enter your choice: ";
+//         cin >> choice;
 
-        switch (choice) {
-            case 1:
-                if (!isLoggedIn) {
-                    // Register new user
-                    cout << "\n--- Register ---\n";
-                    currentUser.registerUser();
+//         switch (choice) {
+//             case 1:
+//                 if (!isLoggedIn) {
+//                     // Register new user
+//                     cout << "\n--- Register ---\n";
+//                     currentUser.registerUser();
 
                     
-                    users.push_back(currentUser);
-                } else {
-                    // View Profile
-                    cout << "\n--- Profile ---\n";
-                    currentUser.viewProfile();
-                }
-                break;
+//                     users.push_back(currentUser);
+//                 } else {
+//                     // View Profile
+//                     cout << "\n--- Profile ---\n";
+//                     currentUser.viewProfile();
+//                 }
+//                 break;
 
-            case 2:
-                if (!isLoggedIn) {
-                    // Login
-                    cout << "\n--- Login ---\n";
-                    string inputUsername, inputPassword;
-                    cout << "Enter Username: ";
-                    cin >> inputUsername;
-                    cout << "Enter Password: ";
-                    cin >> inputPassword;
+//             case 2:
+//                 if (!isLoggedIn) {
+//                     // Login
+//                     cout << "\n--- Login ---\n";
+//                     string inputUsername, inputPassword;
+//                     cout << "Enter Username: ";
+//                     cin >> inputUsername;
+//                     cout << "Enter Password: ";
+//                     cin >> inputPassword;
 
-                    bool found = false;
-                    for (const auto &user : users) {
-                        if (user.getUsername() == inputUsername && user.getPassword() == inputPassword) {
-                            currentUser = user;
-                            found = true;
-                            isLoggedIn = true;
-                            cout << "Login successful!\n";
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        cout << "Invalid username or password. Please try again.\n";
-                    }
-                } else {
-                    // Update Profile
-                    cout << "\n--- Update Profile ---\n";
-                    currentUser.updateProfile();
-                }
-                break;
+//                     bool found = false;
+//                     for (const auto &user : users) {
+//                         if (user.getUsername() == inputUsername && user.getPassword() == inputPassword) {
+//                             currentUser = user;
+//                             found = true;
+//                             isLoggedIn = true;
+//                             cout << "Login successful!\n";
+//                             break;
+//                         }
+//                     }
+//                     if (!found) {
+//                         cout << "Invalid username or password. Please try again.\n";
+//                     }
+//                 } else {
+//                     // Update Profile
+//                     cout << "\n--- Update Profile ---\n";
+//                     currentUser.updateProfile();
+//                 }
+//                 break;
 
-            case 3:
-                if (isLoggedIn) {
-                    // Logout
-                    cout << "\n--- Logout ---\n";
-                    isLoggedIn = false;
-                    cout << "You have successfully logged out.\n";
-                } else {
-                    cout << "Invalid option!\n";
-                }
-                break;
+//             case 3:
+//                 if (isLoggedIn) {
+//                     // Logout
+//                     cout << "\n--- Logout ---\n";
+//                     isLoggedIn = false;
+//                     cout << "You have successfully logged out.\n";
+//                 } else {
+//                     cout << "Invalid option!\n";
+//                 }
+//                 break;
 
-            case 0:
-                cout << "Exiting program. Goodbye!\n";
-                return 0;
+//             case 0:
+//                 cout << "Exiting program. Goodbye!\n";
+//                 return 0;
 
-            default:
-                cout << "Invalid choice! Please try again.\n";
-        }
-    }
+//             default:
+//                 cout << "Invalid choice! Please try again.\n";
+//         }
+//     }
 
-    return 0;
-};
+//     return 0;
+// };
 
