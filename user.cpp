@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
-//#include <fstream> //For future implementation for saving user data into file
-//#include <sstream> //For future implementation for saving user data into file
+#include <fstream> //For future implementation for saving user data into file
+#include <sstream> //For future implementation for saving user data into file
+#include <vector>
 using namespace std;
 
 class User
@@ -50,6 +51,60 @@ class User
         }
     };
 
+    bool isLoggedIn(const string &inputUsername, const string &inputPassword)
+    {  
+        ifstream inFile("users.txt");
+        if (!inFile) 
+        {
+            cerr << "Err: Unable to open data file.\n";
+            return false;
+        };
+
+        string line, uname, pwd, fname, mail, id;
+        int phone, rate, credits;
+        bool found = false;
+
+        while (getline(inFile, line)) 
+        {
+            stringstream ss(line);
+            
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            getline(ss, fname, ',');
+
+            ss >> phone;
+            ss.ignore();
+
+            getline(ss, mail, ',');
+            getline(ss, id, ',');
+
+            ss >> rate;
+            ss.ignore();
+            ss >> credits;
+
+            
+            if (uname == inputUsername && pwd == inputPassword) 
+            {
+                //fill current user details
+                username = uname;
+                password = pwd;
+                fullName = fname;
+                phoneNumber = phone;
+                email = mail;
+                idNumber = id;
+                rating = rate;
+                creditPoints = credits;
+                
+                inFile.close();
+                return true;
+            };
+        };
+
+        inFile.close();
+        return false; 
+
+    };
+
     void registerUser()
     {
         cout << "Enter Username: ";
@@ -68,18 +123,76 @@ class User
         cout << "Enter ID Number: ";
         cin >> idNumber;
         cout << "Registration complete!" << endl;
+
+        //Saving user information into text file 
+        // NOTE: PLEASE REVIEW which type of file is used to save user information
+        ofstream outFile("users.txt", ios::app); 
+        if (outFile) {
+            outFile << username << "," << password << "," << fullName << "," << phoneNumber << "," << email << "," << idNumber << "," << rating << "," << creditPoints << "\n";
+            cout << "Registration complete!" << endl;
+        }
+        else
+        {
+            cerr << "Error: Unable to save user information to file.\n";
+        };
+        outFile.close();
     };
 
     void viewProfile()
     {
-        cout << "Profile Information:" << endl;
-        cout << "Username: " << username << endl;
-        cout << "Full Name: " << fullName << endl;
-        cout << "Phone Number: " << phoneNumber << endl;
-        cout << "Email: " << email << endl;
-        cout << "ID Number: " << idNumber << endl;
-        cout << "Rating: " << rating << endl;
-        cout << "Credit Points: " << creditPoints << endl;
+        ifstream inFile("users.txt");
+        if (!inFile) 
+        {
+            cerr << "Err: Unable to open data file.\n";
+        };
+
+        string line, uname, pwd, fname, mail, id;
+        int phone, rate, credits;
+        bool found = false;
+
+        while (getline(inFile, line)) 
+        {
+            stringstream ss(line);
+            
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            getline(ss, fname, ',');
+
+            ss >> phone;
+            ss.ignore();
+
+            getline(ss, mail, ',');
+            getline(ss, id, ',');
+
+            ss >> rate;
+            ss.ignore();
+            ss >> credits;
+
+            if (uname == username && pwd == password) 
+            {
+                found = true;
+
+                cout << "Profile Information:" << "\n";
+
+                cout << "Username: " << uname << "\n";
+                cout << "Full Name: " << fname << "\n";
+                cout << "Phone Number: " << phone << "\n";
+                cout << "Email: " << mail << "\n";
+                cout << "ID Number: " << id << "\n";
+                cout << "Rating: " << rate << "\n";
+                cout << "Credit Points: " << credits << "\n";
+
+                break;
+            }
+        };
+
+        if (!found) 
+        {
+            cout << "Err: User has not registered or does not exist in database!\n";
+        }
+
+        inFile.close();
+
     };
 
     void updateProfile()
@@ -88,7 +201,7 @@ class User
         cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password" << endl;
         int choice;
         cin >> choice;
-        cin.ignore(); // Handle leftover newline
+        cin.ignore(); 
         switch (choice) {
             case 1:
                 cout << "Enter new Full Name: ";
@@ -116,11 +229,7 @@ class User
 //TEST MAIN
 
 int main() {
-
-    //User object
-    User user("", "", "", 0, "", "");
-
-    int choice;
+    User currentUser;
     bool isLoggedIn = false;
 
     while (true) {
@@ -136,6 +245,7 @@ int main() {
             cout << "0. Exit\n";
         }
 
+        int choice;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -144,11 +254,12 @@ int main() {
                 if (!isLoggedIn) {
                     // Register new user
                     cout << "\n--- Register ---\n";
-                    user.registerUser();
+                    currentUser.registerUser();
+                    break;
                 } else {
                     // View Profile
                     cout << "\n--- Profile ---\n";
-                    user.viewProfile();
+                    currentUser.viewProfile();
                 }
                 break;
 
@@ -162,16 +273,19 @@ int main() {
                     cout << "Enter Password: ";
                     cin >> inputPassword;
 
-                    if (inputUsername == user.getUsername() && inputPassword == user.getPassword()) {
+                    isLoggedIn = isLoggedIn = currentUser.isLoggedIn(inputUsername, inputPassword);
+                    
+                    //testing isLoggedIn() status
+                    if (isLoggedIn) {
                         cout << "Login successful!\n";
-                        isLoggedIn = true;
                     } else {
                         cout << "Invalid username or password. Please try again.\n";
                     }
+
                 } else {
                     // Update Profile
                     cout << "\n--- Update Profile ---\n";
-                    user.updateProfile();
+                    currentUser.updateProfile();
                 }
                 break;
 
@@ -194,6 +308,5 @@ int main() {
                 cout << "Invalid choice! Please try again.\n";
         }
     }
+};
 
-    return 0;
-}
