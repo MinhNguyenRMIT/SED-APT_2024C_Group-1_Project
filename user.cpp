@@ -102,7 +102,7 @@ class User
 
         inFile.close();
         return false; 
-        
+
     };
 
     void registerUser()
@@ -201,7 +201,7 @@ class User
         cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password" << endl;
         int choice;
         cin >> choice;
-        cin.ignore(); // Handle leftover newline
+        cin.ignore(); 
         switch (choice) {
             case 1:
                 cout << "Enter new Full Name: ";
