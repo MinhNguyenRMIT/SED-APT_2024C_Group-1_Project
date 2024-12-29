@@ -51,6 +51,60 @@ class User
         }
     };
 
+    bool isLoggedIn(const string &inputUsername, const string &inputPassword)
+    {  
+        ifstream inFile("users.txt");
+        if (!inFile) 
+        {
+            cerr << "Err: Unable to open data file.\n";
+            return false;
+        };
+
+        string line, uname, pwd, fname, mail, id;
+        int phone, rate, credits;
+        bool found = false;
+
+        while (getline(inFile, line)) 
+        {
+            stringstream ss(line);
+            
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            getline(ss, fname, ',');
+
+            ss >> phone;
+            ss.ignore();
+
+            getline(ss, mail, ',');
+            getline(ss, id, ',');
+
+            ss >> rate;
+            ss.ignore();
+            ss >> credits;
+
+            
+            if (uname == inputUsername && pwd == inputPassword) 
+            {
+                //fill current user details
+                username = uname;
+                password = pwd;
+                fullName = fname;
+                phoneNumber = phone;
+                email = mail;
+                idNumber = id;
+                rating = rate;
+                creditPoints = credits;
+                
+                inFile.close();
+                return true;
+            };
+        };
+
+        inFile.close();
+        return false; 
+        
+    };
+
     void registerUser()
     {
         cout << "Enter Username: ";
@@ -174,120 +228,85 @@ class User
 
 //TEST MAIN
 
-// int main() {
-//     vector<User> users; // store registered users
+int main() {
+    User currentUser;
+    bool isLoggedIn = false;
 
-//     // Load users 
-//     ifstream inFile("users.txt");
-//     if (inFile) {
-//         string line, uname, pwd, fname, mail, id;
-//         int phone, rate, credits;
-//         while (getline(inFile, line)) {
-//             stringstream ss(line);
-//             getline(ss, uname, ',');
-//             getline(ss, pwd, ',');
-//             getline(ss, fname, ',');
-//             ss >> phone;
-//             ss.ignore(); 
-//             getline(ss, mail, ',');
-//             getline(ss, id, ',');
-//             ss >> rate;
-//             ss.ignore(); 
-//             ss >> credits;
+    while (true) {
+        cout << "\n--- User Menu ---\n";
+        if (!isLoggedIn) {
+            cout << "1. Register\n";
+            cout << "2. Login\n";
+            cout << "0. Exit\n";
+        } else {
+            cout << "1. View Profile\n";
+            cout << "2. Update Profile\n";
+            cout << "3. Logout\n";
+            cout << "0. Exit\n";
+        }
 
-//             users.emplace_back(uname, pwd, fname, phone, mail, id, rate, credits);
-//         }
-//         inFile.close();
-//     } else {
-//         cout << "No existing user data found. Starting fresh.\n";
-//     }
+        int choice;
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-//     User currentUser;
-//     bool isLoggedIn = false;
+        switch (choice) {
+            case 1:
+                if (!isLoggedIn) {
+                    // Register new user
+                    cout << "\n--- Register ---\n";
+                    currentUser.registerUser();
+                    break;
+                } else {
+                    // View Profile
+                    cout << "\n--- Profile ---\n";
+                    currentUser.viewProfile();
+                }
+                break;
 
-//     while (true) {
-//         cout << "\n--- User Menu ---\n";
-//         if (!isLoggedIn) {
-//             cout << "1. Register\n";
-//             cout << "2. Login\n";
-//             cout << "0. Exit\n";
-//         } else {
-//             cout << "1. View Profile\n";
-//             cout << "2. Update Profile\n";
-//             cout << "3. Logout\n";
-//             cout << "0. Exit\n";
-//         }
+            case 2:
+                if (!isLoggedIn) {
+                    // Login
+                    cout << "\n--- Login ---\n";
+                    string inputUsername, inputPassword;
+                    cout << "Enter Username: ";
+                    cin >> inputUsername;
+                    cout << "Enter Password: ";
+                    cin >> inputPassword;
 
-//         int choice;
-//         cout << "Enter your choice: ";
-//         cin >> choice;
-
-//         switch (choice) {
-//             case 1:
-//                 if (!isLoggedIn) {
-//                     // Register new user
-//                     cout << "\n--- Register ---\n";
-//                     currentUser.registerUser();
-
+                    isLoggedIn = isLoggedIn = currentUser.isLoggedIn(inputUsername, inputPassword);
                     
-//                     users.push_back(currentUser);
-//                 } else {
-//                     // View Profile
-//                     cout << "\n--- Profile ---\n";
-//                     currentUser.viewProfile();
-//                 }
-//                 break;
+                    //testing isLoggedIn() status
+                    if (isLoggedIn) {
+                        cout << "Login successful!\n";
+                    } else {
+                        cout << "Invalid username or password. Please try again.\n";
+                    }
 
-//             case 2:
-//                 if (!isLoggedIn) {
-//                     // Login
-//                     cout << "\n--- Login ---\n";
-//                     string inputUsername, inputPassword;
-//                     cout << "Enter Username: ";
-//                     cin >> inputUsername;
-//                     cout << "Enter Password: ";
-//                     cin >> inputPassword;
+                } else {
+                    // Update Profile
+                    cout << "\n--- Update Profile ---\n";
+                    currentUser.updateProfile();
+                }
+                break;
 
-//                     bool found = false;
-//                     for (const auto &user : users) {
-//                         if (user.getUsername() == inputUsername && user.getPassword() == inputPassword) {
-//                             currentUser = user;
-//                             found = true;
-//                             isLoggedIn = true;
-//                             cout << "Login successful!\n";
-//                             break;
-//                         }
-//                     }
-//                     if (!found) {
-//                         cout << "Invalid username or password. Please try again.\n";
-//                     }
-//                 } else {
-//                     // Update Profile
-//                     cout << "\n--- Update Profile ---\n";
-//                     currentUser.updateProfile();
-//                 }
-//                 break;
+            case 3:
+                if (isLoggedIn) {
+                    // Logout
+                    cout << "\n--- Logout ---\n";
+                    isLoggedIn = false;
+                    cout << "You have successfully logged out.\n";
+                } else {
+                    cout << "Invalid option!\n";
+                }
+                break;
 
-//             case 3:
-//                 if (isLoggedIn) {
-//                     // Logout
-//                     cout << "\n--- Logout ---\n";
-//                     isLoggedIn = false;
-//                     cout << "You have successfully logged out.\n";
-//                 } else {
-//                     cout << "Invalid option!\n";
-//                 }
-//                 break;
+            case 0:
+                cout << "Exiting program. Goodbye!\n";
+                return 0;
 
-//             case 0:
-//                 cout << "Exiting program. Goodbye!\n";
-//                 return 0;
-
-//             default:
-//                 cout << "Invalid choice! Please try again.\n";
-//         }
-//     }
-
-//     return 0;
-// };
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    }
+};
 
