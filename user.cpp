@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include <fstream> //For future implementation for saving user data into file
-#include <sstream> //For future implementation for saving user data into file
+#include <fstream> // For future implementation for saving user data into file
+#include <sstream> // For future implementation for saving user data into file
 #include <vector>
 using namespace std;
 
@@ -85,7 +85,7 @@ class User
             
             if (uname == inputUsername && pwd == inputPassword) 
             {
-                //fill current user details
+                // fill current user details
                 username = uname;
                 password = pwd;
                 fullName = fname;
@@ -124,8 +124,9 @@ class User
         cin >> idNumber;
         cout << "Registration complete!" << endl;
 
-        //Saving user information into text file 
+        // Saving user information into text file 
         // NOTE: PLEASE REVIEW which type of file is used to save user information
+        // >>> txt file as data file
         ofstream outFile("users.txt", ios::app); 
         if (outFile) {
             outFile << username << "," << password << "," << fullName << "," << phoneNumber << "," << email << "," << idNumber << "," << rating << "," << creditPoints << "\n";
@@ -195,14 +196,19 @@ class User
 
     };
 
+    // method of updating profile was written based on this source:
+    // https://stackoverflow.com/questions/34507989/update-and-delete-data-from-file-in-c 
     void updateProfile()
     {
         cout << "Update Profile Information:" << endl;
         cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password" << endl;
+
         int choice;
         cin >> choice;
         cin.ignore(); 
-        switch (choice) {
+
+        switch (choice) 
+        {
             case 1:
                 cout << "Enter new Full Name: ";
                 getline(cin, fullName);
@@ -221,13 +227,44 @@ class User
                 break;
             default:
                 cout << "Invalid choice!" << endl;
+                return;
+        };
+
+        ifstream inFile("users.txt");
+        ofstream tempFile("temp.txt");
+        if (!inFile || !tempFile) 
+        {
+        cerr << "Err: Unable to open data file.\n";
+        return;
         }
+
+        string line, uname, pwd;
+        while (getline(inFile, line)) 
+        {
+            stringstream ss(line);
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+
+            if (uname == username && pwd == password) {
+                // Update the logged-in user's record
+                tempFile << username << "," << password << "," << fullName << "," << phoneNumber << "," << email << "," << idNumber << "," << rating << "," << creditPoints << "\n";
+            } else {
+                // Write other records as-is
+                tempFile << line << "\n";
+            };
+        };
+
+        inFile.close();
+        tempFile.close();
+
+        remove("users.txt");
+        rename("temp.txt", "users.txt");
+
         cout << "Profile updated successfully!" << endl;
     };
 };
 
 //TEST MAIN
-
 int main() {
     User currentUser;
     bool isLoggedIn = false;
