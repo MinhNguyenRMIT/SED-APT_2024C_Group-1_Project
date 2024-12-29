@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
-//#include <fstream> //For future implementation for saving user data into file
-//#include <sstream> //For future implementation for saving user data into file
+#include <fstream> //For future implementation for saving user data into file
+#include <sstream> //For future implementation for saving user data into file
+#include <vector>
 using namespace std;
 
 class User
@@ -68,18 +69,76 @@ class User
         cout << "Enter ID Number: ";
         cin >> idNumber;
         cout << "Registration complete!" << endl;
+
+        //Saving user information into text file 
+        // NOTE: PLEASE REVIEW which type of file is used to save user information
+        ofstream outFile("users.txt", ios::app); 
+        if (outFile) {
+            outFile << username << "," << password << "," << fullName << "," << phoneNumber << "," << email << "," << idNumber << "," << rating << "," << creditPoints << "\n";
+            cout << "Registration complete!" << endl;
+        }
+        else
+        {
+            cerr << "Error: Unable to save user information to file.\n";
+        };
+        outFile.close();
     };
 
     void viewProfile()
     {
-        cout << "Profile Information:" << endl;
-        cout << "Username: " << username << endl;
-        cout << "Full Name: " << fullName << endl;
-        cout << "Phone Number: " << phoneNumber << endl;
-        cout << "Email: " << email << endl;
-        cout << "ID Number: " << idNumber << endl;
-        cout << "Rating: " << rating << endl;
-        cout << "Credit Points: " << creditPoints << endl;
+        ifstream inFile("users.txt");
+        if (!inFile) 
+        {
+            cerr << "Err: Unable to open data file.\n";
+        };
+
+        string line, uname, pwd, fname, mail, id;
+        int phone, rate, credits;
+        bool found = false;
+
+        while (getline(inFile, line)) 
+        {
+            stringstream ss(line);
+            
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            getline(ss, fname, ',');
+
+            ss >> phone;
+            ss.ignore();
+
+            getline(ss, mail, ',');
+            getline(ss, id, ',');
+
+            ss >> rate;
+            ss.ignore();
+            ss >> credits;
+
+            if (uname == username && pwd == password) 
+            {
+                found = true;
+
+                cout << "Profile Information:" << "\n";
+
+                cout << "Username: " << uname << "\n";
+                cout << "Full Name: " << fname << "\n";
+                cout << "Phone Number: " << phone << "\n";
+                cout << "Email: " << mail << "\n";
+                cout << "ID Number: " << id << "\n";
+                cout << "Rating: " << rate << "\n";
+                cout << "Credit Points: " << credits << "\n";
+
+                break;
+            }
+        };
+
+        if (!found) 
+        {
+            cout << "Err: User has not registered or does not exist in database!\n";
+        }
+
+        inFile.close();
+
     };
 
     void updateProfile()
@@ -116,11 +175,34 @@ class User
 //TEST MAIN
 
 int main() {
+    vector<User> users; // store registered users
 
-    //User object
-    User user("", "", "", 0, "", "");
+    // Load users 
+    ifstream inFile("users.txt");
+    if (inFile) {
+        string line, uname, pwd, fname, mail, id;
+        int phone, rate, credits;
+        while (getline(inFile, line)) {
+            stringstream ss(line);
+            getline(ss, uname, ',');
+            getline(ss, pwd, ',');
+            getline(ss, fname, ',');
+            ss >> phone;
+            ss.ignore(); 
+            getline(ss, mail, ',');
+            getline(ss, id, ',');
+            ss >> rate;
+            ss.ignore(); 
+            ss >> credits;
 
-    int choice;
+            users.emplace_back(uname, pwd, fname, phone, mail, id, rate, credits);
+        }
+        inFile.close();
+    } else {
+        cout << "No existing user data found. Starting fresh.\n";
+    }
+
+    User currentUser;
     bool isLoggedIn = false;
 
     while (true) {
@@ -136,6 +218,7 @@ int main() {
             cout << "0. Exit\n";
         }
 
+        int choice;
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -144,11 +227,14 @@ int main() {
                 if (!isLoggedIn) {
                     // Register new user
                     cout << "\n--- Register ---\n";
-                    user.registerUser();
+                    currentUser.registerUser();
+
+                    
+                    users.push_back(currentUser);
                 } else {
                     // View Profile
                     cout << "\n--- Profile ---\n";
-                    user.viewProfile();
+                    currentUser.viewProfile();
                 }
                 break;
 
@@ -162,16 +248,23 @@ int main() {
                     cout << "Enter Password: ";
                     cin >> inputPassword;
 
-                    if (inputUsername == user.getUsername() && inputPassword == user.getPassword()) {
-                        cout << "Login successful!\n";
-                        isLoggedIn = true;
-                    } else {
+                    bool found = false;
+                    for (const auto &user : users) {
+                        if (user.getUsername() == inputUsername && user.getPassword() == inputPassword) {
+                            currentUser = user;
+                            found = true;
+                            isLoggedIn = true;
+                            cout << "Login successful!\n";
+                            break;
+                        }
+                    }
+                    if (!found) {
                         cout << "Invalid username or password. Please try again.\n";
                     }
                 } else {
                     // Update Profile
                     cout << "\n--- Update Profile ---\n";
-                    user.updateProfile();
+                    currentUser.updateProfile();
                 }
                 break;
 
@@ -196,4 +289,5 @@ int main() {
     }
 
     return 0;
-}
+};
+
