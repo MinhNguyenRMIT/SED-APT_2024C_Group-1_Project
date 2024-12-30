@@ -5,9 +5,11 @@ using namespace std;
 #include <bits/stdc++.h>
 class admin
 {
-private:
-    
-public:
+    private:
+        string adminUser = "admin";
+        string adminPass = "admin123";
+
+    public:
     
 };
 

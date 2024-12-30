@@ -1,12 +1,15 @@
 {
     "files.associations": {
-        "*.embeddedhtml": "html",
         "*.ejs": "html",
+        "*.css": "tailwindcss",
+        "*.embeddedhtml": "html",
         "iostream": "cpp",
         "ostream": "cpp",
         "iosfwd": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "xstring": "cpp"
     },
+    "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
         "Minh",
         "minhnguyen"
