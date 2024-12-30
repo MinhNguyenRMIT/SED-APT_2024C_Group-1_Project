@@ -6,38 +6,54 @@ using namespace std;
 class item
 {
 private:
-    string itemName,category ,description, highestBidder;
+    string itemName,category ,description, highestBidder,ID;
     int startingBid,currentBid,minBuyerRating;
     time_t endTime,startTime,currentTime;
 
 public:
-    item(string itemName="",string category="",string description="",string highestBidder="",int startingBid=0,int currentBid=0,int minBuyerRating=0,time_t endTime=0,time_t startTime=0):itemName(itemName),category(category),description(description),highestBidder(highestBidder),startingBid(startingBid),currentBid(currentBid), minBuyerRating(minBuyerRating),endTime(endTime),startTime(startTime){
+    item(string ID,string itemName="",string category="",string description="",string highestBidder="",int startingBid=0,int currentBid=0,int minBuyerRating=0,time_t endTime=0,time_t startTime=0):ID(ID),itemName(itemName),category(category),description(description),highestBidder(highestBidder),startingBid(startingBid),currentBid(currentBid), minBuyerRating(minBuyerRating),endTime(endTime),startTime(startTime){
         
     }
+    void setID(string ID) { this->ID = ID; }
     void setItemName(string itemName) { this->itemName = itemName; }
-void setCategory(string category) { this->category = category; }
-void setDescription(string description) { this->description = description; }
-void setHighestBidder(string highestBidder) { this->highestBidder = highestBidder; }
-void setStartingBid(int startingBid) { this->startingBid = startingBid; }
-void setCurrentBid(int currentBid) { this->currentBid = currentBid; }
-void setMinBuyerRating(int minBuyerRating) { this->minBuyerRating = minBuyerRating; }
-void setEndTime(time_t endTime) { this->endTime = endTime; }
-void setStartTime(time_t startTime) { this->startTime = startTime; }
+    void setCategory(string category) { this->category = category; }
+    void setDescription(string description) { this->description = description; }
+    void setHighestBidder(string highestBidder) { this->highestBidder = highestBidder; }
+    void setStartingBid(int startingBid) { this->startingBid = startingBid; }
+    void setCurrentBid(int currentBid) { this->currentBid = currentBid; }
+    void setMinBuyerRating(int minBuyerRating) { this->minBuyerRating = minBuyerRating; }
+    void setEndTime(time_t endTime) { this->endTime = endTime; }
+    void setStartTime(time_t startTime) { this->startTime = startTime; }
 
-    
+    string getID() const { return ID; }
     string getItemName() const { return itemName; }
-string getCategory() const { return category; }
-string getDescription() const { return description; }
-string getHighestBidder() const { return highestBidder; }
-int getStartingBid() const { return startingBid; }
-int getCurrentBid() const { return currentBid; }
-int getMinBuyerRating() const { return minBuyerRating; }
-time_t getEndTime() const { return endTime; }
-time_t getStartTime() const { return startTime; }
+    string getCategory() const { return category; }
+    string getDescription() const { return description; }
+    string getHighestBidder() const { return highestBidder; }
+    int getStartingBid() const { return startingBid; }
+    int getCurrentBid() const { return currentBid; }
+    int getMinBuyerRating() const { return minBuyerRating; }
+    time_t getEndTime() const { return endTime; }
+    time_t getStartTime() const { return startTime; }
 
     void updateListing(){};
-    void addBid(){};
-    void concludeAuction(){};
+void addBid(string bidderName, int bidAmount,int rating){
+    if(bidAmount>currentBid && rating>=minBuyerRating){
+        currentBid = bidAmount;
+        highestBidder = bidderName;
+    }
+    else if(bidAmount>currentBid && rating<minBuyerRating){
+        cout<<"You do not meet the minimum buyer rating requirement"<<endl;
+    }
+    else if(bidAmount<=currentBid){
+        cout<<"Your bid is lower than the current bid"<<endl;
+    }
+
+
+};
+void concludeAuction(){
+    
+};
 };
 
 
@@ -45,11 +61,11 @@ time_t getStartTime() const { return startTime; }
 
 
 
-    
+
 int main()
 {
-    item i1("item1","category1","description1","highestBidder1",100,100,5,0,0);
-    cout << i1.getItemName() << endl;
+    item i1("1","item1","category1","description1","bidder1",100,100,4,0,0);
+    cout << i1.getEndTime() << endl;
     return 0;
 }
 
