@@ -36,7 +36,9 @@ public:
     time_t getEndTime() const { return endTime; }
     time_t getStartTime() const { return startTime; }
 
-    void updateListing(){};
+    void updateListing(){
+
+    };
 void addBid(string bidderName, int bidAmount,int rating){
     if(bidAmount>currentBid && rating>=minBuyerRating){
         currentBid = bidAmount;
@@ -64,8 +66,9 @@ void concludeAuction(){
 
 int main()
 {
-    item i1("1","item1","category1","description1","bidder1",100,100,4,0,0);
-    cout << i1.getEndTime() << endl;
+    item i1("1","item1","category1","description1","bidder1",100,100,4,4000,0);
+    time_t endTime = i1.getEndTime();
+    cout << ctime(&endTime) << endl;
     return 0;
 }
 
