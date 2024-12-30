@@ -25,16 +25,16 @@ public:
     void setEndTime(time_t endTime) { this->endTime = endTime; }
     void setStartTime(time_t startTime) { this->startTime = startTime; }
 
-    string getID() const { return ID; }
-    string getItemName() const { return itemName; }
-    string getCategory() const { return category; }
-    string getDescription() const { return description; }
-    string getHighestBidder() const { return highestBidder; }
-    int getStartingBid() const { return startingBid; }
-    int getCurrentBid() const { return currentBid; }
-    int getMinBuyerRating() const { return minBuyerRating; }
-    time_t getEndTime() const { return endTime; }
-    time_t getStartTime() const { return startTime; }
+    string getID()  { return ID; }
+    string getItemName()  { return itemName; }
+    string getCategory()  { return category; }
+    string getDescription()  { return description; }
+    string getHighestBidder()  { return highestBidder; }
+    int getStartingBid()  { return startingBid; }
+    int getCurrentBid()  { return currentBid; }
+    int getMinBuyerRating()  { return minBuyerRating; }
+    time_t getEndTime()  { return endTime; }
+    time_t getStartTime()  { return startTime; }
 
     void updateListing(){
 
