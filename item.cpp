@@ -45,11 +45,7 @@ time_t getStartTime() const { return startTime; }
 
 
 
-void updateListing(){};
-void addBid(){};
-void concludeAuction(){
     
-};
 int main()
 {
     item i1("item1","category1","description1","highestBidder1",100,100,5,0,0);
