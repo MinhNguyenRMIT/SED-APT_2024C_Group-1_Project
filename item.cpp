@@ -1,8 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
-using std::string;
 using namespace std;
+
+template <typename T>
+void saveToFile(const string& filename, const T& data) {
+    ofstream file;
+    file.open(filename, ios::app); // Open file in append mode
+    if (file.is_open()) {
+        file << data << endl;
+        file.close();
+    } else {
+        cout << "Unable to open file" << endl;
+    }
+}
 
 class item
 {
@@ -44,25 +55,27 @@ public:
     
 
     void updateListing(item i) {
-        ifstream infile("item.txt");
-        ofstream outfile("item_temp.txt", ios::app);
-        bool itemExists = false;
-        if (infile.is_open() && outfile.is_open()) {
+        ofstream file;
+        file.open("item.txt", ios::app);
+        if (file.is_open()) {
+            if (i.ID == ID) {
             string line;
+            ifstream infile("item.txt");
+            bool idExists = false;
             while (getline(infile, line)) {
-                if (line.find(i.ID) != string::npos) {
-                    cout << "Item with ID " << i.ID << " already exists." << endl;
-                    itemExists = true;
+                if (line.substr(0, line.find(',')) == i.ID) {
+                idExists = true;
+                break;
                 }
-                outfile << line << endl;
-            }
-            if (!itemExists) {
-                outfile << i.ID << "," << i.itemName << "," << i.category << "," << i.description << "," << i.highestBidder << "," << i.startingBid << "," << i.currentBid << "," << i.minBuyerRating << "," << i.endTime << "," << i.startTime << endl;
             }
             infile.close();
-            outfile.close();
-            remove("item.txt");
-            rename("item_temp.txt", "item.txt");
+            if (!idExists) {
+                file << i.ID << "," << i.itemName << "," << i.category << "," << i.description << "," << i.highestBidder << "," << i.startingBid << "," << i.currentBid << "," << i.minBuyerRating << "," << i.endTime << "," << i.startTime << endl;
+            } else {
+                cout << "ID already exists in the file" << endl;
+            }
+            }
+            
         } else {
             cout << "Error opening file" << endl;
         }
@@ -107,14 +120,19 @@ void concludeAuction(item i){
 
 int main()
 {
-    item i1("1","item1","category1","description1","bidder1",100,100,4,4000,0);
-    item i2("2","item2","category2","description2","bidder2",200,200,3,5000,0);
-    item i3("3","item3","category3","description3","bidder3",300,300,2,6000,0);     
-    i1.updateListing(i2);
-    time_t endTime = i1.getEndTime();
+    time_t currentTime = time(0);
+    time_t endTime = currentTime + 3600; // example end time 1 hour from now
+
+    item zero("0","0","0","0","0",0,0,0,0,0);
+    item aiyesg("2","item2","category2","description2","bidder2",200,200,3,1610000000,1600000000);
+    item item3("3","item3","category3","description3","bidder3",300,300,2,1610000000,1600000000);
     
-    i1.updateListing(i1);
+    aiyesg.addBid("bidder2", 250, 4, "2");   
+    item3.addBid("bidder3", 350, 3, "3");
+    aiyesg.updateListing(aiyesg);
+    item3.updateListing(item3);
+    
+   
     return 0;
 
 }
-
