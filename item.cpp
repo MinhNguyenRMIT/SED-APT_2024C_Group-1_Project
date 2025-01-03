@@ -134,8 +134,7 @@ void concludeAuction(item i){
 
 int main()
 {
-    time_t currentTime = time(0);
-    time_t endTime = currentTime + 3600; // example end time 1 hour from now
+   
 
     item zero("0","0","0","0","0",0,0,0,0,0);
     item aiyesg("2","item2","category2","description2","bidder2",200,200,3,1610000000,1600000000);

@@ -12,18 +12,34 @@ class admin
     public:
     
 };
-
-int  main(){
-    ifstream in("user.txt");
-    string text;
-    while(getline(in,text)){
-        
-        
-        cout<<text;
-
-
+void readUsers() {
+    ifstream usersFile("users.txt");
+    if (!usersFile) {
+        cerr << "Unable to open users.txt" << endl;
+        return;
     }
-    in.close();
+    string line;
+    while (getline(usersFile, line)) {
+        cout << line << endl;
+    }
+    usersFile.close();
+}
+
+void readItems() {
+    ifstream itemsFile("item.txt");
+    if (!itemsFile) {
+        cerr << "Unable to open items.txt" << endl;
+        return;
+    }
+    string line;
+    while (getline(itemsFile, line)) {
+        cout << line << endl;
+    }
+    itemsFile.close();
+}
+int  main(){
+    readItems();
+    readUsers();
     return 0;
 
 };
