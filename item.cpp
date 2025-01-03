@@ -106,7 +106,21 @@ void concludeAuction(item i){
     if (localtime(&current_time) == localtime(&i.endTime))
     {
         cout<<"Auction has ended"<<endl;
+    ifstream infile("item.txt");
+    ofstream tempFile("temp.txt");
+    string line;
+    while (getline(infile, line)) {
+        if (line.substr(0, line.find(',')) != i.ID) {
+        tempFile << line << endl;
+        }
     }
+    infile.close();
+    tempFile.close();
+    remove("item.txt");
+    rename("temp.txt", "item.txt");
+        
+    }else{
+        cout<<"Auction has not ended"<<endl;
     
     
 };
