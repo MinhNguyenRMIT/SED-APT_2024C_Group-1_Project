@@ -13,7 +13,7 @@ private:
 
 public:
     // Constructor
-    Member(string uname)
+    Member(string uname = "")
         : username(uname), buyerRating(3.0), sellerRating(3.0),
           buyerRatingCount(0), sellerRatingCount(0) {}
 
@@ -33,7 +33,7 @@ public:
         sellerRatingCount++;
     }
 
-    // Display Member Info
+    // Display Member's Rating Info
     void displayRatings() const {
         cout << username << "'s Ratings:\n";
         cout << "  Buyer Rating: " << fixed << setprecision(2) << buyerRating << "\n";
