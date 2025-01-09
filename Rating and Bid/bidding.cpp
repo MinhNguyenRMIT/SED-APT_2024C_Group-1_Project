@@ -57,34 +57,34 @@ public:
     }
 };
 
-int main() {
-    // Create an item
-    Item laptop("Laptop", "Electronics", 500, "JaneSeller", 3.0);
+// int main() {
+//     // Create an item
+//     Item laptop("Laptop", "Electronics", 500, "JaneSeller", 3.0);
 
-    // Display initial item details
-    cout << "Item: " << laptop.getItemName() << "\n";
-    cout << "Minimum Rating Required: " << laptop.getMinBuyerRating() << "\n";
-    cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n\n";
+//     // Display initial item details
+//     cout << "Item: " << laptop.getItemName() << "\n";
+//     cout << "Minimum Rating Required: " << laptop.getMinBuyerRating() << "\n";
+//     cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n\n";
 
-    // Simulate bidding
-    string buyer1 = "JohnBuyer";
-    double buyer1CP = 1000;  // Credit points
-    double buyer1Rating = 4.0;
+//     // Simulate bidding
+//     string buyer1 = "JohnBuyer";
+//     double buyer1CP = 1000;  // Credit points
+//     double buyer1Rating = 4.0;
 
-    cout << buyer1 << " tries to place a bid of 600.\n";
-    laptop.placeBid(buyer1, 600, buyer1CP, buyer1Rating);
+//     cout << buyer1 << " tries to place a bid of 600.\n";
+//     laptop.placeBid(buyer1, 600, buyer1CP, buyer1Rating);
 
-    string buyer2 = "AliceBuyer";
-    double buyer2CP = 700;  // Credit points
-    double buyer2Rating = 2.5;
+//     string buyer2 = "AliceBuyer";
+//     double buyer2CP = 700;  // Credit points
+//     double buyer2Rating = 2.5;
 
-    cout << "\n" << buyer2 << " tries to place a bid of 700.\n";
-    laptop.placeBid(buyer2, 700, buyer2CP, buyer2Rating);
+//     cout << "\n" << buyer2 << " tries to place a bid of 700.\n";
+//     laptop.placeBid(buyer2, 700, buyer2CP, buyer2Rating);
 
-    // Display updated item details
-    cout << "\nUpdated Item Details:\n";
-    cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n";
-    cout << "Highest Bidder: " << laptop.getHighestBidder() << "\n";
+//     // Display updated item details
+//     cout << "\nUpdated Item Details:\n";
+//     cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n";
+//     cout << "Highest Bidder: " << laptop.getHighestBidder() << "\n";
 
-    return 0;
-}
+//     return 0;
+// }

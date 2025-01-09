@@ -106,7 +106,21 @@ void concludeAuction(item i){
     if (localtime(&current_time) == localtime(&i.endTime))
     {
         cout<<"Auction has ended"<<endl;
+    ifstream infile("item.txt");
+    ofstream tempFile("temp.txt");
+    string line;
+    while (getline(infile, line)) {
+        if (line.substr(0, line.find(',')) != i.ID) {
+        tempFile << line << endl;
+        }
     }
+    infile.close();
+    tempFile.close();
+    remove("item.txt");
+    rename("temp.txt", "item.txt");
+        
+    }else{
+        cout<<"Auction has not ended"<<endl;
     
     
 };
@@ -118,21 +132,20 @@ void concludeAuction(item i){
 
 
 
-int main()
-{
-    time_t currentTime = time(0);
-    time_t endTime = currentTime + 3600; // example end time 1 hour from now
+// int main()
+// {
+   
 
-    item zero("0","0","0","0","0",0,0,0,0,0);
-    item aiyesg("2","item2","category2","description2","bidder2",200,200,3,1610000000,1600000000);
-    item item3("3","item3","category3","description3","bidder3",300,300,2,1610000000,1600000000);
+//     item zero("0","0","0","0","0",0,0,0,0,0);
+//     item aiyesg("2","item2","category2","description2","bidder2",200,200,3,1610000000,1600000000);
+//     item item3("3","item3","category3","description3","bidder3",300,300,2,1610000000,1600000000);
     
-    aiyesg.addBid("bidder2", 250, 4, "2");   
-    item3.addBid("bidder3", 350, 3, "3");
-    aiyesg.updateListing(aiyesg);
-    item3.updateListing(item3);
+//     aiyesg.addBid("bidder2", 250, 4, "2");   
+//     item3.addBid("bidder3", 350, 3, "3");
+//     aiyesg.updateListing(aiyesg);
+//     item3.updateListing(item3);
     
    
-    return 0;
+//     return 0;
 
-}
+// }
