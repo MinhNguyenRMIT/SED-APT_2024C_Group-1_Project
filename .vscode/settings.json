@@ -97,7 +97,19 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "ios": "cpp",
+        "xfacet": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
