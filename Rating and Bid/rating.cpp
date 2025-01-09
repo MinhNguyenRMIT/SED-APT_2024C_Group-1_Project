@@ -41,45 +41,45 @@ public:
     }
 };
 
-int main() {
-    // Create two members
-    Member seller("JaneSeller");
-    Member buyer("JohnBuyer");
+// int main() {
+//     // Create two members
+//     Member seller("JaneSeller");
+//     Member buyer("JohnBuyer");
 
-    cout << "Initial Ratings:\n";
-    seller.displayRatings();
-    buyer.displayRatings();
+//     cout << "Initial Ratings:\n";
+//     seller.displayRatings();
+//     buyer.displayRatings();
 
-    // Simulate a transaction
-    cout << "\nTransaction Completed!\n";
-    cout << "Both parties can rate each other (1-5).\n";
+//     // Simulate a transaction
+//     cout << "\nTransaction Completed!\n";
+//     cout << "Both parties can rate each other (1-5).\n";
 
-    double sellerToBuyerRating, buyerToSellerRating;
+//     double sellerToBuyerRating, buyerToSellerRating;
 
-    // Input seller rating the buyer
-    cout << "Seller rates Buyer (1-5): ";
-    cin >> sellerToBuyerRating;
-    while (sellerToBuyerRating < 1 || sellerToBuyerRating > 5) {
-        cout << "Invalid rating. Please rate between 1 and 5: ";
-        cin >> sellerToBuyerRating;
-    }
+//     // Input seller rating the buyer
+//     cout << "Seller rates Buyer (1-5): ";
+//     cin >> sellerToBuyerRating;
+//     while (sellerToBuyerRating < 1 || sellerToBuyerRating > 5) {
+//         cout << "Invalid rating. Please rate between 1 and 5: ";
+//         cin >> sellerToBuyerRating;
+//     }
 
-    // Input buyer rating the seller
-    cout << "Buyer rates Seller (1-5): ";
-    cin >> buyerToSellerRating;
-    while (buyerToSellerRating < 1 || buyerToSellerRating > 5) {
-        cout << "Invalid rating. Please rate between 1 and 5: ";
-        cin >> buyerToSellerRating;
-    }
+//     // Input buyer rating the seller
+//     cout << "Buyer rates Seller (1-5): ";
+//     cin >> buyerToSellerRating;
+//     while (buyerToSellerRating < 1 || buyerToSellerRating > 5) {
+//         cout << "Invalid rating. Please rate between 1 and 5: ";
+//         cin >> buyerToSellerRating;
+//     }
 
-    // Update ratings
-    seller.rateBuyer(sellerToBuyerRating);
-    buyer.rateSeller(buyerToSellerRating);
+//     // Update ratings
+//     seller.rateBuyer(sellerToBuyerRating);
+//     buyer.rateSeller(buyerToSellerRating);
 
-    // Display updated ratings
-    cout << "\nUpdated Ratings:\n";
-    seller.displayRatings();
-    buyer.displayRatings();
+//     // Display updated ratings
+//     cout << "\nUpdated Ratings:\n";
+//     seller.displayRatings();
+//     buyer.displayRatings();
 
-    return 0;
-}
+//     return 0;
+// }
