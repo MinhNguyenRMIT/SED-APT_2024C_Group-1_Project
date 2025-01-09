@@ -18,8 +18,8 @@ void saveToFile(const string& filename, const T& data) {
 class item
 {
 private:
-    string itemName,category ,description, highestBidder,ID;
-    int startingBid,currentBid,minBuyerRating;
+    string itemName, category ,description, highestBidder, ID;
+    int startingBid, currentBid, minBuyerRating;
     time_t endTime, startTime, current_time;
     
 

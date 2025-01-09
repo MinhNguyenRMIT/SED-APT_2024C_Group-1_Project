@@ -13,7 +13,11 @@ private:
 
 public:
     // Constructor
+<<<<<<< HEAD
     Member(std::string uname)
+=======
+    Member(string uname = "")
+>>>>>>> c0748fa814ab0e3334a9b05c25d06d5db607b9b4
         : username(uname), buyerRating(3.0), sellerRating(3.0),
           buyerRatingCount(0), sellerRatingCount(0) {}
 
@@ -33,7 +37,7 @@ public:
         sellerRatingCount++;
     }
 
-    // Display Member Info
+    // Display Member's Rating Info
     void displayRatings() const {
         std::cout << username << "'s Ratings:\n";
         std::cout << "  Buyer Rating: " << std::fixed << std::setprecision(2) << buyerRating << "\n";
