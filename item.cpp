@@ -3,17 +3,7 @@
 #include <ctime>
 using namespace std;
 
-template <typename T>
-void saveToFile(const string& filename, const T& data) {
-    ofstream file;
-    file.open(filename, ios::app); // Open file in append mode
-    if (file.is_open()) {
-        file << data << endl;
-        file.close();
-    } else {
-        cout << "Unable to open file" << endl;
-    }
-}
+
 
 class item
 {
@@ -100,8 +90,7 @@ public:
     else if (localtime(&current_time) >= localtime(&endTime)){
         cout<<"Auction has ended"<<endl;
     }
-
-};
+}
 void concludeAuction(item i){
     if (localtime(&current_time) == localtime(&i.endTime))
     {
@@ -119,13 +108,11 @@ void concludeAuction(item i){
     remove("item.txt");
     rename("temp.txt", "item.txt");
         
-    }else{
-        cout<<"Auction has not ended"<<endl;
-    
-    
+    } else {
+        cout << "Auction has not ended" << endl;
+    }
+}
 };
-};
-
 
 
 
