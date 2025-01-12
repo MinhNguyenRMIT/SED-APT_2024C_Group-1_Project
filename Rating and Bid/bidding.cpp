@@ -4,7 +4,7 @@
 #include <iomanip>
 
 
-class Item {
+class bidding {
 private:
     std::string itemName;
     std::string category;
@@ -17,7 +17,7 @@ private:
 
 public:
     // Constructor
-    Item(std::string name, std::string cat, double minB, std::string seller, double minRating)
+    bidding(std::string name, std::string cat, double minB, std::string seller, double minRating)
         : itemName(name), category(cat), minBid(minB), currentBid(0),
           sellerUsername(seller), highestBidder(""), minBuyerRating(minRating), isActive(true) {}
 

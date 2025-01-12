@@ -3,7 +3,7 @@
 #include <iomanip>
 
 
-class Member {
+class rating {
 private:
     std::string username;
     double buyerRating;
@@ -13,7 +13,7 @@ private:
 
 public:
     // Constructor
-    Member(std::string uname)
+    rating(std::string uname)
         : username(uname), buyerRating(3.0), sellerRating(3.0),
           buyerRatingCount(0), sellerRatingCount(0) {}
 

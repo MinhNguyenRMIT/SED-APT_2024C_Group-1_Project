@@ -38,9 +38,9 @@ void readItems() {
     }
     itemsFile.close();
 }
-int  main(){
-    readItems();
-    readUsers();
-    return 0;
+//int  main(){
+  //  readItems();
+   // readUsers();
+   // return 0;
 
-};
+//};
