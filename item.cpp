@@ -43,18 +43,7 @@ public:
     time_t getStartTime()  { return startTime; }
 
     
-    void viewBidding() {
-        ifstream file("item.txt");
-        if (file.is_open()) {
-            string line;
-            while (getline(file, line)) {
-                cout << line << endl;
-            }
-            file.close();
-        } else {
-            cout << "Error opening file" << endl;
-        }
-    }
+
     void updateListing(item i) {
         ofstream file;
         file.open("item.txt", ios::app);
@@ -126,7 +115,18 @@ void concludeAuction(item i){
 }
 
 };
-
+void viewBidding() {
+        ifstream file("item.txt");
+        if (file.is_open()) {
+            string line;
+            while (getline(file, line)) {
+                cout << line << endl;
+            }
+            file.close();
+        } else {
+            cout << "Error opening file" << endl;
+        }
+    }
 
 
 

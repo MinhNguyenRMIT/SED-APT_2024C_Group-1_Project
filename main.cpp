@@ -13,13 +13,13 @@ using namespace std;
 //TEST MAIN FOR USER CLASS SWITCH CASE
  int main() 
  {
-    item i("0","n/a","n/a","n/a", "n/a", 0, 0, 0, 0, 0);
+    
     
     
      User currentUser;
      bool isLoggedIn = false;
 
-//     while (true) 
+//     
 //     {
 //         cout << "EEET2482/COSC2082 GROUP ASSIGNMENT\n" 
 //         << "Semester 3 2024\n" 
@@ -107,7 +107,7 @@ using namespace std;
                  break;
                  case 4:
                    cout << "\n--- item listing ---\n";
-                    i.viewBidding();
+                    viewBidding();
                         
                      
                      break;
@@ -119,5 +119,6 @@ using namespace std;
                  cout << "Invalid choice! Please try again.\n";
          }
      }
- };
+ 
+ 
 
