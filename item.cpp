@@ -70,8 +70,8 @@ public:
             cout << "Error opening file" << endl;
         }
     }
-    void addBid(string bidderName, int bidAmount,int rating,string itemID){
     
+    void addBid(string bidderName, int bidAmount,int rating,string itemID){  
     if (itemID==ID && localtime(&current_time) < localtime(&endTime)){
         if(bidAmount>currentBid && rating>=minBuyerRating){
             currentBid = bidAmount;
@@ -91,6 +91,7 @@ public:
         cout<<"Auction has ended"<<endl;
     }
 }
+
 void concludeAuction(item i){
     if (localtime(&current_time) == localtime(&i.endTime))
     {
