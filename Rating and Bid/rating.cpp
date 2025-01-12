@@ -58,18 +58,18 @@ public:
 
 //     // Input seller rating the buyer
 //     std::cout << "Seller rates Buyer (1-5): ";
-//     cin >> sellerToBuyerRating;
+//     std::cin >> sellerToBuyerRating;
 //     while (sellerToBuyerRating < 1 || sellerToBuyerRating > 5) {
 //         std::cout << "Invalid rating. Please rate between 1 and 5: ";
-//         cin >> sellerToBuyerRating;
+//         std::cin >> sellerToBuyerRating;
 //     }
 
 //     // Input buyer rating the seller
 //     std::cout << "Buyer rates Seller (1-5): ";
-//     cin >> buyerToSellerRating;
+//     std::cin >> buyerToSellerRating;
 //     while (buyerToSellerRating < 1 || buyerToSellerRating > 5) {
 //         std::cout << "Invalid rating. Please rate between 1 and 5: ";
-//         cin >> buyerToSellerRating;
+//         std::cin >> buyerToSellerRating;
 //     }
 
 //     // Update ratings
