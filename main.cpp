@@ -111,6 +111,25 @@ using namespace std;
                         
                      
                      break;
+            case 5:
+                if (isLoggedIn) {
+                    cout << "\n--- Add Bid ---\n";
+                    string bidderName;
+                    int bidAmount;
+                    int rating;
+                    string itemID;
+                    cout << "Enter bidder name: ";
+                    cin >> bidderName;
+                    cout << "Enter bid amount: ";
+                    cin >> bidAmount;
+                    cout << "Enter rating: ";
+                    cin >> rating;
+                    cout << "Enter item ID: ";
+                    cin >> itemID;
+                    item.addBid(bidderName, bidAmount, rating, itemID);
+                } else {
+                    cout << "You must be logged in to add a bid.\n";
+                }
              case 0:
                  cout << "Exiting program. Goodbye!\n";
                  return 0;
