@@ -1,5 +1,4 @@
 #include <iostream>
-// #include "user.cpp" 
 #include "membertest.cpp" 
 
 using namespace std;
@@ -9,18 +8,21 @@ int main() {
     bool isLoggedIn = false;
 
     while (true) {
-        cout << "\n--- Main Menu ---\n";
+        cout << "\n------ Main Menu ------\n";
         if (!isLoggedIn) {
             cout << "1. Register\n";
             cout << "2. Login\n";
-            cout << "0. Exit\n";
+            cout << "0. Exit";
         } else {
-            cout << "1. View Dashboard\n";
-            cout << "2. Create Item Listing\n";
-            cout << "3. Top-Up Credit Points\n";
-            cout << "4. Logout\n";
-            cout << "0. Exit\n";
+            cout << "1. View your account\n";
+            cout << "2. Update Profile\n";
+            cout << "3. View Dashboard\n";
+            cout << "4. Create Item Listing\n";
+            cout << "5. Top-Up Credit Points\n";
+            cout << "6. Logout\n";
+            cout << "0. Exit";
         }
+        cout << "\n-----------------------\n";
 
         int choice;
         cout << "Enter your choice: ";
@@ -29,12 +31,13 @@ int main() {
         switch (choice) {
             case 1:
                 if (!isLoggedIn) {
-                    
+                    // Register user
                     cout << "\n--- Register ---\n";
                     currentMember.registerUser(); // Inherited from User class
                 } else {
-                    // View Dashboard
-                    currentMember.viewDashboard(); // Member-specific method
+                    // View Profile
+                    cout << "\n--- Profile ---\n";
+                    currentMember.viewProfile();
                 }
                 break;
 
@@ -54,6 +57,25 @@ int main() {
                     } else {
                         cout << "Invalid username or password. Please try again.\n";
                     }
+                } else {
+                    // Update Profile
+                    cout << "\n--- Update Profile ---\n";
+                    currentMember.updateProfile();
+                }
+                break;
+
+            case 3:
+                if (!isLoggedIn) {
+                    cout << "Invalid option!\n";
+                } else {
+                    // View Dashboard
+                    currentMember.viewDashboard(); // Member-specific method
+                }
+                break;
+
+            case 4:
+                if (!isLoggedIn) {
+                    cout << "Invalid option!\n";
                 } else {
                     cout << "\n--- Create Item Listing ---\n";
                     int id, startingBid;
@@ -75,7 +97,7 @@ int main() {
                 }
                 break;
 
-            case 3:
+            case 5:
                 if (isLoggedIn) {
                     cout << "\n--- Top-Up Credit Points ---\n";
                     int amount;
@@ -87,9 +109,8 @@ int main() {
                 }
                 break;
 
-            case 4:
-                if (isLoggedIn) {
-                    // Logout
+            case 6:
+                if (isLoggedIn){
                     cout << "\n--- Logout ---\n";
                     isLoggedIn = false;
                     cout << "You have successfully logged out.\n";

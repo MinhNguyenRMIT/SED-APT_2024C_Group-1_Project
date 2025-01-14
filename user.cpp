@@ -201,7 +201,7 @@ class User
     void updateProfile()
     {
         cout << "Update Profile Information:" << endl;
-        cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password" << endl;
+        cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password\n0. Cancel\n" << endl;
 
         int choice;
         cin >> choice;
@@ -225,6 +225,11 @@ class User
                 cout << "Enter new Password: ";
                 cin >> password;
                 break;
+
+            case 0:
+                cout << "Operation cancelled!"<<endl;
+                break;
+                
             default:
                 cout << "Invalid choice!" << endl;
                 return;
