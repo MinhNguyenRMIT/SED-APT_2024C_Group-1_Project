@@ -29,7 +29,7 @@ using namespace std;
 //         << "S3979760, Pham Hieu Dat\n"
 //         << "S3965654, Le Tuan Kiet\n"
 //         << "S4066691, Le Van Chi Hoang\n"
-//         << "S3915233, Nguyen Hoang Minh\n";
+//         << "S3915233, Nguyen Hoanh Minh\n";
 
 //         cout << "\n--- User Menu ---\n";
 
