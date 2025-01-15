@@ -1,10 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
+#include <map>
 
-
-class bidding {
+class Bidding {
 private:
     std::string itemName;
     std::string category;
@@ -14,12 +13,15 @@ private:
     std::string highestBidder;
     double minBuyerRating;
     bool isActive;
+    double bidIncrement;
+    std::map<std::string, double> bidLimits; // Stores buyer's bid limits
 
 public:
     // Constructor
-    bidding(std::string name, std::string cat, double minB, std::string seller, double minRating)
-        : itemName(name), category(cat), minBid(minB), currentBid(0),
-          sellerUsername(seller), highestBidder(""), minBuyerRating(minRating), isActive(true) {}
+    Bidding(std::string name, std::string cat, double minB, std::string seller, double minRating, double increment)
+        : itemName(name), category(cat), minBid(minB), currentBid(minB),
+          sellerUsername(seller), highestBidder(""), minBuyerRating(minRating),
+          isActive(true), bidIncrement(increment) {}
 
     // Getters
     std::string getItemName() const { return itemName; }
@@ -55,36 +57,59 @@ public:
         std::cout << "Bid placed successfully! Current highest bid: " << currentBid << " by " << highestBidder << "\n";
         return true;
     }
+
+    // Set bid limit
+    bool setBidLimit(std::string buyer, double limit) {
+        if (bidLimits.count(buyer) > 0) {
+            std::cout << "You already have a bid limit set.\n";
+            return false;
+        }
+
+        for (const auto& [otherBuyer, otherLimit] : bidLimits) {
+            if (otherLimit == limit) {
+                std::cout << "Bid limit conflicts with another buyer's limit. Suggested limit: " << limit + bidIncrement << "\n";
+                return false;
+            }
+        }
+
+        bidLimits[buyer] = limit;
+        std::cout << "Bid limit set successfully for " << buyer << ": " << limit << "\n";
+        return true;
+    }
+
+    // Automatically handle bids based on limits
+    void handleAutomaticBids(std::string newBidder, double newBidAmount) {
+        for (auto& [buyer, limit] : bidLimits) {
+            if (buyer != newBidder && newBidAmount + bidIncrement <= limit && newBidAmount + bidIncrement > currentBid) {
+                currentBid = newBidAmount + bidIncrement;
+                highestBidder = buyer;
+                std::cout << "Automatic bid placed for " << buyer << ": " << currentBid << "\n";
+                return;
+            }
+        }
+
+        std::cout << "No automatic bids placed.\n";
+    }
 };
 
 // int main() {
 //     // Create an item
-//     Item laptop("Laptop", "Electronics", 500, "JaneSeller", 3.0);
+//     Bidding item("Laptop", "Electronics", 50, "JaneSeller", 3.0, 10);
 
-//     // Display initial item details
-//     std::cout << "Item: " << laptop.getItemName() << "\n";
-//     std::cout << "Minimum Rating Required: " << laptop.getMinBuyerRating() << "\n";
-//     std::cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n\n";
+//     // Set bid limits
+//     item.setBidLimit("BuyerXXX", 90);
+//     item.setBidLimit("BuyerYYY", 100);
+//     item.setBidLimit("BuyerZZZ", 110);
 
 //     // Simulate bidding
-//     std::string buyer1 = "JohnBuyer";
-//     double buyer1CP = 1000;  // Credit points
-//     double buyer1Rating = 4.0;
+//     item.placeBid("BuyerYYY", 60, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerYYY", 60);
 
-//     std::cout << buyer1 << " tries to place a bid of 600.\n";
-//     laptop.placeBid(buyer1, 600, buyer1CP, buyer1Rating);
+//     item.placeBid("BuyerZZZ", 80, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerZZZ", 80);
 
-//     std::string buyer2 = "AliceBuyer";
-//     double buyer2CP = 700;  // Credit points
-//     double buyer2Rating = 2.5;
-
-//     std::cout << "\n" << buyer2 << " tries to place a bid of 700.\n";
-//     laptop.placeBid(buyer2, 700, buyer2CP, buyer2Rating);
-
-//     // Display updated item details
-//     std::cout << "\nUpdated Item Details:\n";
-//     std::cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n";
-//     std::cout << "Highest Bidder: " << laptop.getHighestBidder() << "\n";
+//     item.placeBid("BuyerWWW", 100, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerWWW", 100);
 
 //     return 0;
 // }
