@@ -7,17 +7,20 @@ using namespace std;
 #include "user.cpp"
 #include "admin-1.cpp"
 #include "item.cpp"
+#include "item.h"
 #include "Rating and Bid/bidding.cpp"
 #include "Rating and Bid/rating.cpp"
 
 //TEST MAIN FOR USER CLASS SWITCH CASE
  int main() 
  {
+    Item item("1", "Laptop", "Electronics", "Brand new laptop", "John", 1000, 1000, 4, 1635724800, 1635724800);
     
     
     
      User currentUser;
      bool isLoggedIn = false;
+    
 
 //     
 //     {
