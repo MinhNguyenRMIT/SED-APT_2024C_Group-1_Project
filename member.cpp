@@ -1,4 +1,5 @@
 #include "item.cpp" 
+#include "item.h"
 #include "admin-1.cpp"
 #include "Rating and Bid/Bidding.cpp"
 #include "Rating and Bid/Rating.cpp"
@@ -22,16 +23,16 @@ private:
     string email;
     int id;
     int rating;
-    int creditPoints;
+    double creditPoints;
     int itemsWon;
     vector<item> itemsListed; // Use the `item` class for listed items
     vector<string> itemsBid; // Store IDs of items bid on
 
 public:
-    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 0, int creditPoints = 0, int won = 0)
+    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 0, double creditPoints = 0.0, int won = 0)
         : username(uname), password(pwd), fullName(fname), phoneNumber(phone), email(mail), id(idNumber), rating(rate), creditPoints(creditPoints), itemsWon(won) {}
 
-    string getMembername() const { return username; }
+    string getMemberName() const { return username; }
     string getPassword() const { return password; }
     string getFullName() const { return fullName; }
     string getEmail() const { return email; }
@@ -59,21 +60,17 @@ public:
         cout << "Credit Points: " << creditPoints << "\n";
         cout << "Items Won: " << itemsWon << "\n";
         cout << "-----------------------------------\n";
+
+        cout << "\n1. Top up credits \n0. Exit";
     }
 
-    void topUpCredits(int amount) {
-
-        creditPoints += amount;
-        cout << "Successfully added " << amount << " credit points.\n";
-    }
-
-    void createItemListing(string id, string name, string category, string description, int startingBid, int minBuyerRating) {
-        time_t now = time(0);
-        time_t endTime = now + (7 * 24 * 60 * 60); // Auction ends in 7 days
-        item newItem(id, name, category, description, "", startingBid, startingBid, minBuyerRating, endTime, now);
-        itemsListed.push_back(newItem);
-        cout << "Item \"" << name << "\" has been listed successfully.\n";
-    }
+    // void createItemListing(string id, string name, string category, string description, int startingBid, int minBuyerRating) {
+    //     time_t now = time(0);
+    //     time_t endTime = now + (7 * 24 * 60 * 60); // Auction ends in 7 days
+    //     item newItem(id, name, category, description, "", startingBid, startingBid, minBuyerRating, endTime, now);
+    //     itemsListed.push_back(newItem);
+    //     cout << "Item \"" << name << "\" has been listed successfully.\n";
+    // }
 
     void viewDashboard() {
     cout << "\n--- Dashboard ---\n";
@@ -99,7 +96,7 @@ public:
     }
 
     int choice;
-    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Return to Main Menu\n";
+    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
     cout << "Enter your choice: ";
     cin >> choice;
 
@@ -127,7 +124,12 @@ public:
             }
             break;
         }
+
         case 3:
+            cout << "Bidding!";
+            break;
+
+        case 4:
             cout << "Returning to main menu...\n";
             break;
         default:
@@ -222,7 +224,6 @@ void login(const string &username, const string &password) {
 
 void registerUser() {
     cout << "\n--- Register New Member ---\n";
-
     string uname, pwd, fname, mail;
     int phone, idNumber;
 
@@ -242,8 +243,7 @@ void registerUser() {
 
     ofstream outFile("users.txt", ios::app);
     if (outFile) {
-        outFile << uname << "," << pwd << "," << fname << ","
-                << phone << "," << mail << "," << idNumber << ",3,,0\n";
+        outFile << uname << "," << pwd << "," << fname << "," << phone << "," << mail << "," << idNumber << ",3,0.0,0\n";
         cout << "Registration successful!\n";
     } else {
         cerr << "Error: Unable to save member information to file.\n";
@@ -252,12 +252,20 @@ void registerUser() {
 }
 
 void welcomeScreen() {
+    
     cout << "-----------------------------------\n";
     cout << "AUCTION APPLICATION\n";
     cout << "-----------------------------------\n";
     cout << "1. Guest\n2. Member\n3. Admin\n4. Register as Member\n0. Exit\n";
     cout << "Enter your choice: ";
 }
+
+// void topUpCredits(Member &member) {
+//     double currCP = member.getCreditPoints();
+//     currCP += 1.0;
+//     member.getCreditPoints = currCP;
+//     cout << "Successfully added 1 credit point.\n";
+// }
 
 void handleMember(Member &member) {
     int choice;
@@ -271,26 +279,50 @@ void handleMember(Member &member) {
                 member.viewDashboard();
                 break;
             case 2:
+                int profChoice;
                 member.viewProfile();
+                cout << "Enter your Choice: ";
+                cin >> profChoice;
+                switch(profChoice){
+                    case 1:
+                        // topUpCredits(member);
+                        break;
+                    case 2:
+                        cout << "\nProfile Updated Successfully!\n";
+                        break;
+                    case 0:
+                        break;
+                }
+
                 break;
             case 3: {
-                string id, name, category, description;
-                int startingBid, minBuyerRating;
+                string ID, itemName, category, description, highestBidder, seller;
+                int startingBid, currentBid, minBuyerRating;
+                time_t endTime, startTime;
+
+                seller = member.getMemberName();
                 cout << "Enter Item ID: ";
-                cin >> id;
+                cin >> ID;
                 cin.ignore();
                 cout << "Enter Item Name: ";
-                getline(cin, name);
+                getline(cin, itemName);
                 cout << "Enter Category: ";
                 getline(cin, category);
                 cout << "Enter Description: ";
                 getline(cin, description);
+                highestBidder = "---";
                 cout << "Enter Starting Bid: ";
                 cin >> startingBid;
+                currentBid = 0;
                 cout << "Enter Minimum Buyer Rating: ";
                 cin >> minBuyerRating;
+                cout << "Enter bid length in days: ";
+                cin >> endTime;
+                cout << "Enter start time in days: ";
+                cin >> startTime;
 
-                member.createItemListing(id, name, category, description, startingBid, minBuyerRating);
+                new item (ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
+                viewBidding();
                 break;
             }
             case 4:
