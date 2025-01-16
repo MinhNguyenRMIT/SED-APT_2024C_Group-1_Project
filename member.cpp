@@ -72,62 +72,7 @@ public:
     //     cout << "Item \"" << name << "\" has been listed successfully.\n";
     // }
 
-    void viewDashboard() {
-    cout << "\n--- Dashboard ---\n";
-    cout << "Credit Points: " << creditPoints << "\n";
-    cout << "Rating: " << rating << "\n";
-
-    cout << "\nYour active item listings:\n";
-    cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
-    cout << "----------------------------------------------------------------------------------------\n";
-   
-
-    cout << "\nYour active bids:\n";
-    cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
-    cout << "----------------------------------------------------------------------------------------\n";
     
-
-    int choice;
-    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
-    cout << "Enter your choice: ";
-    cin >> choice;
-
-    switch (choice) {
-        case 1: {
-            // int itemID;
-            cout << "Enter the number of the item listing to view details: ";
-            // cin >> itemID;
-            // if (itemID > 0 && itemID <= itemsListed.size()) {
-            //     itemsListed[itemID - 1].viewBidding();
-            // } else {
-            //     cout << "Invalid item selection.\n";
-            // }
-            break;
-        }
-        case 2: {
-            // int bidID;
-            cout << "Enter the number of the bid to view details: ";
-            // cin >> bidID;
-            // if (bidID > 0 && bidID <= itemsBid.size()) {
-            //     item &itm = itemsListed[bidID - 1];
-            //     itm.viewBidding();
-            // } else {
-            //     cout << "Invalid bid selection.\n";
-            // }
-            break;
-        }
-
-        case 3:
-            cout << "Bidding!";
-            break;
-
-        case 4:
-            cout << "Returning to main menu...\n";
-            break;
-        default:
-            cout << "Invalid option. Returning to main menu...\n";
-    }
-}
 
     // void placeBid(item &itm, int amount) {
     //     if (amount <= creditPoints && amount > itm.getCurrentBid()) {
@@ -146,8 +91,6 @@ public:
     //     }
     // }
 };
-
-
 
 Member* loadUser(const string &username, const string &password) {
     ifstream inFile("users.txt");

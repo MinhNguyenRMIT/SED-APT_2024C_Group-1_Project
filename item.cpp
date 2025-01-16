@@ -53,6 +53,47 @@ void item::viewBidding() {
     cout << "-------------------------------------------------------" << endl;
 }
 
+item* loadItem(const string &itemId) {
+    ifstream inFile("item.txt");
+    if (!inFile) {
+        cerr << "Error: Unable to open item.txt.\n";
+        return nullptr;
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string ID, itemName, category, description, highestBidder, seller;
+        int startingBid, currentBid, minBuyerRating;
+        time_t endTime, startTime;
+
+        getline(ss, ID, ',');
+        if (ID == itemId) {
+            getline(ss, itemName, ',');
+            getline(ss, category, ',');
+            getline(ss, description, ',');
+            getline(ss, highestBidder, ',');
+            getline(ss, seller, ',');
+            ss >> startingBid;
+            ss.ignore(); 
+            ss >> currentBid;
+            ss.ignore();
+            ss >> minBuyerRating;
+            ss.ignore();
+            ss >> endTime;
+            ss.ignore();
+            ss >> startTime;
+
+            inFile.close();
+            return new item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
+        }
+    }
+
+    inFile.close();
+    return nullptr;
+}
+
+
 void item::updateListing(item i) {
     ofstream file;
     file.open("item.txt", ios::app);
@@ -86,6 +127,8 @@ void item::concludeAuction(item i) {
         cout << "Auction has ended" << endl;
     }
 }
+
+
 
 void viewBidding() {
     ifstream file("item.txt");

@@ -13,6 +13,56 @@ using namespace std;
 
 // //TEST MAIN FOR USER CLASS SWITCH CASE
 
+void viewDashboard() {
+    cout << "\n--- Dashboard ---\n";
+
+    cout << "\nYour active item listings:\n";
+    cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
+    cout << "----------------------------------------------------------------------------------------\n";
+   
+
+    cout << "\nYour active bids:\n";
+    cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
+    cout << "----------------------------------------------------------------------------------------\n";
+    
+
+    int choice;
+    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    
+    switch (choice) {
+        case 1: {
+            string itemId;
+            cout << "Enter the number of the item listing to view details: ";
+            cin >> itemId;
+            item* loadedItem = loadItem(itemId);
+            if (loadedItem) {
+                loadedItem->viewBidding(); 
+                delete loadedItem;        
+            }
+            break;
+        }
+        case 2: {
+            cout << "Enter the number of the bid to view details: ";
+            break;
+        }
+
+        case 3:
+            cout << "Bidding!";
+            break;
+
+        case 4:
+            cout << "Returning to main menu...\n";
+            break;
+        default:
+            cout << "Invalid option. Returning to main menu...\n";
+            break;
+
+    } 
+}
+
 void handleMember(Member &member) {
     int choice;
     do {
@@ -22,7 +72,7 @@ void handleMember(Member &member) {
         cin >> choice;
         switch (choice) {
             case 1:
-                member.viewDashboard();
+                viewDashboard();
                 break;
             case 2:
                 int profChoice;
@@ -68,7 +118,15 @@ void handleMember(Member &member) {
                 cin >> startTime;
 
                 item item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
-                // viewBidding();
+                ofstream outFile("item.txt", ios::app);
+                if (outFile) {
+                    outFile << ID << "," << itemName << "," << category << "," << description << "," << highestBidder << "," << seller << "," << startingBid << "," << currentBid << "," << minBuyerRating << "," << endTime << "," << startTime << "," << "\n";
+                    cout << "Item Listing created! Here's what the info: ";
+                    item.viewBidding();
+                } else {
+                    cerr << "Error: Unable to save Item Listing information to file.\n";
+                }
+                outFile.close();
                 break;
             }
             case 4:
@@ -79,6 +137,8 @@ void handleMember(Member &member) {
         }
     } while (choice != 4);
 }
+
+
 
 //NEW TEST MAIN
 int main() {
@@ -129,7 +189,6 @@ int main() {
                 cout << "Invalid option. Please try again.\n";
         }
     }
-
     return 0;
 }
 
