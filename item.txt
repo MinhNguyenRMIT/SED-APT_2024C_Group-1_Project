@@ -1,5 +1,6 @@
 2,item2,category2,description2,bidder2,bidder1,200,200,3,1610000000,1600000000
 3,item3,category3,description3,bidder3,bidder4,300,300,2,1610000000,1600000000
-1,asdasd,dassadadas,asdas,---,da,100,0,3,1610000000,1600000000,
-1,123123,dasdds,asdsad,---,da,4000,0,10,161000000,160999998,
-24,asdadd,asdasd,asdasd,---,MinhNguyen,100,0,6,1723000000,1725000000,
+1,asdasd,dassadadas,asdas,da,da,100,200.000000,3,1610000000,1600000000
+1,123123,dasdds,asdsad,---,da,4000,0,10,161000000,160999998
+24,asdadd,asdasd,asdasd,---,MinhNguyen,100,0,6,1723000000,1725000000
+1,asdasd,dassadadas,asdas,da,da,100,200,3,1610000000,1600000000

@@ -23,7 +23,7 @@ private:
     // vector<string> itemsBid; // Store IDs of items bid on
 
 public:
-    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 0, double creditPoints = 0.0, int won = 0)
+    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 3, int creditPoints = 0, int won = 0)
         : username(uname), password(pwd), fullName(fname), phoneNumber(phone), email(mail), id(idNumber), rating(rate), creditPoints(creditPoints), itemsWon(won) {}
 
     string getMemberName() const { return username; }
@@ -56,7 +56,7 @@ public:
         cout << "Items Won: " << itemsWon << "\n";
         cout << "-----------------------------------\n";
 
-        cout << "\n1. Top up credits \n0. Exit";
+        cout << "\n1. Top up credits \n0. Exit\n";
     }
 
 };
@@ -76,24 +76,28 @@ Member* loadUser(const string &username, const string &password) {
 
         if (uname == username && pwd == password) {
             string fullName, email;
-            int idNumber, phoneNumber, rating, creditPoints;
+            int idNumber, phoneNumber, rating, creditPoints, itemsWon;
 
             getline(ss, fullName, ',');
             ss >> phoneNumber;
-            ss.ignore();
+            ss.ignore();  // Ignore the comma
             getline(ss, email, ',');
             ss >> idNumber;
+            ss.ignore();  // Ignore the comma
             ss >> rating;
-            ss.ignore();
+            ss.ignore();  // Ignore the comma
             ss >> creditPoints;
+            ss.ignore();  // Ignore the comma
+            ss >> itemsWon;
 
             inFile.close();
-            return new Member(uname, pwd, fullName, phoneNumber, email, idNumber, rating, creditPoints);
+            return new Member(uname, pwd, fullName, phoneNumber, email, idNumber, rating, creditPoints, itemsWon);
         }
     }
     inFile.close();
     return nullptr;
 }
+
 
 bool isLoggedIn(const string &inputUsername, const string &inputPassword) {
     ifstream inFile("users.txt");

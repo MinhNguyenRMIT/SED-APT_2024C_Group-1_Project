@@ -59,50 +59,69 @@ public:
         std::cout << "Bid placed successfully! Current highest bid: " << currentBid << " by " << highestBidder << "\n";
 
         // Update item.txt
-        updateItemFile();
+        if (!updateItemFile()) {
+            cerr << "Error: Failed to update item.txt.\n";
+            return false;
+        }
 
         return true;
     }
 
     // Update item.txt file
-    void updateItemFile() {
-        std::ifstream inFile("item.txt");
-        std::ofstream outFile("item_temp.txt");
-        std::string line;
+    bool updateItemFile() {
+    std::ifstream inFile("item.txt");
+    std::ofstream outFile("item_temp.txt");
 
-        while (std::getline(inFile, line)) {
-            std::istringstream ss(line);
-            std::vector<std::string> fields;
-            std::string field;
+    if (!inFile || !outFile) {
+        std::cerr << "Error: Unable to open item.txt or create temp file.\n";
+        return false;
+    }
 
-            // Split the line by commas
-            while (std::getline(ss, field, ',')) {
-                fields.push_back(field);
-            }
+    std::string line;
+    bool updated = false;
 
-            // Check if this is the item to update
-            if (fields.size() > 1 && fields[1] == itemName) {
-                fields[7] = std::to_string(currentBid); // Update currentBid
-                fields[4] = highestBidder;             // Update highestBidder
-            }
+    while (std::getline(inFile, line)) {
+        std::istringstream ss(line);
+        std::vector<std::string> fields;
+        std::string field;
 
-            // Write updated line to the new file
-            for (size_t i = 0; i < fields.size(); ++i) {
-                outFile << fields[i];
-                if (i != fields.size() - 1) {
-                    outFile << ",";
-                }
-            }
-            outFile << "\n";
+        while (std::getline(ss, field, ',')) {
+            fields.push_back(field);
         }
 
-        inFile.close();
-        outFile.close();
+        // Check if this is the item to update
+        if (fields.size() > 1 && fields[1] == itemName) { // Use ID if names aren't unique
+            fields[7] = std::to_string(currentBid); 
+            fields[4] = highestBidder;            
+            updated = true;
+        }
 
-        // Replace the old file with the updated file
+        // Write updated or unmodified line to the new file
+        for (size_t i = 0; i < fields.size(); ++i) {
+            outFile << fields[i];
+            if (i != fields.size() - 1) {
+                outFile << ",";
+            }
+        }
+        outFile << "\n";
+    }
+
+    inFile.close();
+    outFile.close();
+
+    // Replace the old file with the updated file
+    if (updated) {
         std::remove("item.txt");
         std::rename("item_temp.txt", "item.txt");
+    } else {
+        std::remove("item_temp.txt");
+        std::cerr << "Error: Item not found for update.\n";
+        return false;
     }
+
+    return true;
+}
+
 
     // Set bid limit
     bool setBidLimit(std::string buyer, double limit) {

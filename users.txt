@@ -1,5 +1,5 @@
-da,ef,asdf,901234567,waf@.rg,1,0,0
+da,ef,asdf,123132,asdas1231,1231312,3,10000,0
 asdf,fdsa,qwerty,1234,asdf1234,4321,3,0
-ad,fe,minh,123132,asdas1231,1231312,0,0,0
+ad,fe,minh,123132,asdas1231,1231312,3,500,0
 hoanh1234,1234,minh,1234,4321hoanh,97231231,0,0,0
-MinhNguyen,23456,MinhNguyen,0901234567,minhNguyen1234@rmit.edu.vn,001234567891,3,0.0,0
+MinhNguyen,23456,MinhNguyen,0901234567,minhNguyen1234@rmit.edu.vn,001234567891,3,200,0

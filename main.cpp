@@ -4,7 +4,6 @@
 using namespace std;
 
 #include "member.cpp"
-#include "user.cpp"
 #include "admin-1.cpp"
 #include "item.cpp"
 #include "item.h"
@@ -85,7 +84,7 @@ void viewDashboard(const string &username) {
     
 
     int choice;
-    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
+    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Rate an Auction\n5. Return to Main Menu\n";
     cout << "Enter your choice: ";
     cin >> choice;
 
@@ -102,6 +101,7 @@ void viewDashboard(const string &username) {
             }
             break;
         }
+
         case 2: {
             cout << "Enter the number of the bid to view details: ";
             break;
@@ -117,24 +117,40 @@ void viewDashboard(const string &username) {
             cin >> passw;
 
             Member* loadedMember = loadUser(username, passw);
-            if (loadedMember) {
-                currBidderName = username;
-                rate = loadedMember->getRating();
-                delete loadedMember;
-            } else {
+            if (!loadedMember) {
                 cout << "Invalid password or user not found.\n";
                 break;
             }
+
+            currBidderName = username;
+            rate = loadedMember->getRating();
+            double bidderCP = loadedMember->getCreditPoints();
+            delete loadedMember;  // No longer needed after extracting required info
 
             cout << "\nEnter Auction ID you wish to bid: ";
             cin >> newItemId;
             cout << "\nEnter Your bid amount: ";
             cin >> bidAmount;
 
-            // Load item and place the bid
+            // Load item details
             item* loadedItem = loadItem(newItemId);
             if (loadedItem) {
-                loadedItem->addBid(currBidderName, bidAmount, rate, newItemId);
+                // Create a Bidding instance with the item's attributes
+                Bidding biddingInstance(
+                    loadedItem->getItemName(),
+                    loadedItem->getCategory(),
+                    loadedItem->getStartingBid(),
+                    loadedItem->getSeller(),
+                    loadedItem->getMinBuyerRating(),
+                    10.0 //temp bid increment value
+                );
+
+                // Attempt to place a bid using the Bidding instance
+                if (biddingInstance.placeBid(currBidderName, bidAmount, bidderCP, rate)) {
+                    loadedItem->setCurrentBid(biddingInstance.getCurrentBid());
+                    loadedItem->setHighestBidder(biddingInstance.getHighestBidder());
+                    loadedItem->updateListing(*loadedItem);  // Update item in the file
+                }
                 delete loadedItem;
             } else {
                 cout << "Item not found for the given Auction ID.\n";
@@ -143,6 +159,9 @@ void viewDashboard(const string &username) {
         }
 
         case 4:
+           cout << "Rating!\n";
+           break;
+        case 5:
             cout << "Returning to main menu...\n";
             break;
 
