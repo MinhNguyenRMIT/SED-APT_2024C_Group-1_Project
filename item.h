@@ -47,7 +47,7 @@ public:
 
     void viewBidding();
     void updateListing(item i);
-    void addBid(string bidderName, int bidAmount, int rating, string itemID);
-    void concludeBidding(item i);
+    void addBid(const string& bidderName, int bidAmount, int rating, const string& itemID);
+    void concludeAuction(item i);
 };
 #endif // ITEM_H
