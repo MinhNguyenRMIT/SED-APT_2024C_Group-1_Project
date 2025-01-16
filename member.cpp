@@ -80,20 +80,20 @@ public:
     cout << "\nYour active item listings:\n";
     cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-    for (size_t i = 0; i < itemsListed.size(); ++i) {
-        item &itm = itemsListed[i];
-        time_t endTime = itm.getEndTime();
-        cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
-    }
+    // for (size_t i = 0; i < itemsListed.size(); ++i) {
+    //     item &itm = itemsListed[i];
+    //     time_t endTime = itm.getEndTime();
+    //     cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
+    // }
 
     cout << "\nYour active bids:\n";
     cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-    for (size_t i = 0; i < itemsBid.size(); ++i) {
-        item &itm = itemsListed[i];
-        time_t endTime = itm.getEndTime();
-        cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
-    }
+    // for (size_t i = 0; i < itemsBid.size(); ++i) {
+    //     item &itm = itemsListed[i];
+    //     time_t endTime = itm.getEndTime();
+    //     cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
+    // }
 
     int choice;
     cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
