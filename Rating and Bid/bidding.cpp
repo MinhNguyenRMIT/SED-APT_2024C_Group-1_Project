@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <fstream>
+#include <sstream>
 
 class Bidding {
 private:
@@ -55,7 +57,51 @@ public:
         currentBid = bidAmount;
         highestBidder = buyer;
         std::cout << "Bid placed successfully! Current highest bid: " << currentBid << " by " << highestBidder << "\n";
+
+        // Update item.txt
+        updateItemFile();
+
         return true;
+    }
+
+    // Update item.txt file
+    void updateItemFile() {
+        std::ifstream inFile("item.txt");
+        std::ofstream outFile("item_temp.txt");
+        std::string line;
+
+        while (std::getline(inFile, line)) {
+            std::istringstream ss(line);
+            std::vector<std::string> fields;
+            std::string field;
+
+            // Split the line by commas
+            while (std::getline(ss, field, ',')) {
+                fields.push_back(field);
+            }
+
+            // Check if this is the item to update
+            if (fields.size() > 1 && fields[1] == itemName) {
+                fields[7] = std::to_string(currentBid); // Update currentBid
+                fields[4] = highestBidder;             // Update highestBidder
+            }
+
+            // Write updated line to the new file
+            for (size_t i = 0; i < fields.size(); ++i) {
+                outFile << fields[i];
+                if (i != fields.size() - 1) {
+                    outFile << ",";
+                }
+            }
+            outFile << "\n";
+        }
+
+        inFile.close();
+        outFile.close();
+
+        // Replace the old file with the updated file
+        std::remove("item.txt");
+        std::rename("item_temp.txt", "item.txt");
     }
 
     // Set bid limit
@@ -84,6 +130,7 @@ public:
                 currentBid = newBidAmount + bidIncrement;
                 highestBidder = buyer;
                 std::cout << "Automatic bid placed for " << buyer << ": " << currentBid << "\n";
+                updateItemFile();
                 return;
             }
         }
