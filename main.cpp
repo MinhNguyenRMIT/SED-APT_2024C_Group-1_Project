@@ -13,10 +13,12 @@ using namespace std;
 
 // Welcome Screen for all users
 void welcomeScreen() {
-    
     cout << "-----------------------------------\n";
+    cout << "EEET2482/COSC2082 GROUP ASSIGNMENT\nSemester 3 2024\nAUCTION APPLICATION\n\nInstructor: Dr Ling Huo Chong\nGroup: Group No 1.\nS3979760, Pham Hieu Dat\nS3965654, Le Tuan Kiet\nS4066691, Le Van Chi Hoang\nS3915233, Nguyen Hoanh Minh\n";
+    cout << "-----------------------------------\n";
+    cout << "-----------------------\n";
     cout << "AUCTION APPLICATION\n";
-    cout << "-----------------------------------\n";
+    cout << "-----------------------\n";
     cout << "1. Guest\n2. Member\n3. Admin\n4. Register as Member\n0. Exit\n";
     cout << "Enter your choice: ";
 }
@@ -105,13 +107,45 @@ void viewDashboard(const string &username) {
             break;
         }
 
-        case 3:
-            cout << "Bidding!";
+        case 3: {
+            cout << "Bidding!\n";
+
+            string currBidderName, newItemId, passw;
+            int bidAmount, rate;
+
+            cout << "Please re-enter your Password: ";
+            cin >> passw;
+
+            Member* loadedMember = loadUser(username, passw);
+            if (loadedMember) {
+                currBidderName = username;
+                rate = loadedMember->getRating();
+                delete loadedMember;
+            } else {
+                cout << "Invalid password or user not found.\n";
+                break;
+            }
+
+            cout << "\nEnter Auction ID you wish to bid: ";
+            cin >> newItemId;
+            cout << "\nEnter Your bid amount: ";
+            cin >> bidAmount;
+
+            // Load item and place the bid
+            item* loadedItem = loadItem(newItemId);
+            if (loadedItem) {
+                loadedItem->addBid(currBidderName, bidAmount, rate, newItemId);
+                delete loadedItem;
+            } else {
+                cout << "Item not found for the given Auction ID.\n";
+            }
             break;
+        }
 
         case 4:
             cout << "Returning to main menu...\n";
             break;
+
         default:
             cout << "Invalid option. Returning to main menu...\n";
             break;
@@ -124,7 +158,7 @@ void handleMember(Member &member) {
     int choice;
     do {
         cout << "\nMember Menu:\n";
-        cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Log Out\n";
+        cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Update Profile\n5. Log Out\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice) {
@@ -186,18 +220,26 @@ void handleMember(Member &member) {
                 outFile.close();
                 break;
             }
-            case 4:
+            case 4:{ // Option for updating profile
+                string currUser = member.getMemberName();
+                string password;
+                cout << "Re-enter your password for security: ";
+                cin >> password;
+                updateProfile(currUser, password); // Pass current username and password
+                break;
+            }
+
+            case 5:
                 cout << "Logging out...\n";
                 break;
             default:
                 cout << "Invalid choice. Please try again.\n";
+                break;
         }
-    } while (choice != 4);
+    } while (choice != 5);
 }
 
-
-
-//NEW TEST MAIN
+// NEW TEST MAIN
 int main() {
     int userType;
     
@@ -248,125 +290,3 @@ int main() {
     }
     return 0;
 }
-
-
-
-// //     
-// //     {
-// //         cout << "EEET2482/COSC2082 GROUP ASSIGNMENT\n" 
-// //         << "Semester 3 2024\n" 
-// //         << "AUCTION APPLICATION\n" 
-// //         << "\nInstructor: Dr Ling Huo Chong\n" 
-// //         << "Group: Group No 1.\n" 
-// //         << "S3979760, Pham Hieu Dat\n"
-// //         << "S3965654, Le Tuan Kiet\n"
-// //         << "S4066691, Le Van Chi Hoang\n"
-// //         << "S3915233, Nguyen Hoanh Minh\n";
-
-// //         cout << "\n--- User Menu ---\n";
-
-// //         if (!isLoggedIn) 
-// //         {
-// //             cout << "1. Register\n";
-// //             cout << "2. Login\n";
-// //             cout << "0. Exit\n";
-// //         } 
-// //         else 
-// //         {
-// //             cout << "1. View Profile\n";
-// //             cout << "2. Update Profile\n";
-// //             cout << "3. Logout\n";
-// //             cout << "0. Exit\n";
-// //         }
-
-//          int choice;
-//          cout << "Enter your choice: ";
-//          cin >> choice;
-
-//          switch (choice) 
-//          {
-//              case 1:
-//                  if (!isLoggedIn) 
-//                  {
-// //                     // Register new user
-//                      cout << "\n--- Register ---\n";
-//                      currentUser.registerUser();
-//                      break;
-//                  } 
-//                  else 
-//                  {
-// //                      View Profile
-//                      cout << "\n--- Profile ---\n";
-//                      currentUser.viewProfile();
-//                  }
-//                  break;
-
-//              case 2:
-//                  if (!isLoggedIn) {
-// //                     // Login
-//                      cout << "\n--- Login ---\n";
-//                      string inputUsername, inputPassword;
-//                      cout << "Enter Username: ";
-//                      cin >> inputUsername;
-//                      cout << "Enter Password: ";
-//                      cin >> inputPassword;
-
-//                      isLoggedIn = isLoggedIn = currentUser.isLoggedIn(inputUsername, inputPassword);
-                    
-// //                     testing isLoggedIn() status
-//                      if (isLoggedIn) {
-//                          cout << "Login successful!\n";
-//                      } else {
-//                          cout << "Invalid username or password. Please try again.\n";
-//                      }
-
-//                  } else {
-//                       //Update Profile
-//                      cout << "\n--- Update Profile ---\n";
-//                      currentUser.updateProfile();
-//                  }
-//                  break;
-
-//              case 3:
-//                  if (isLoggedIn) {
-// //                     // Logout
-//                      cout << "\n--- Logout ---\n";
-//                      isLoggedIn = false;
-//                      cout << "You have successfully logged out.\n";
-//                  } else {
-//                      cout << "Invalid option!\n";
-//                  }
-//                  break;
-//                  case 4:
-//                    cout << "\n--- item listing ---\n";
-//                     viewBidding();
-                        
-                     
-//                      break;
-//             case 5:
-//                 if (isLoggedIn) {
-//                     cout << "\n--- Add Bid ---\n";
-//                     string bidderName;
-//                     int bidAmount;
-//                     int rating;
-//                     string itemID;
-//                     cout << "Enter bidder name: ";
-//                     cin >> bidderName;
-//                     cout << "Enter bid amount: ";
-//                     cin >> bidAmount;
-//                     cout << "Enter rating: ";
-//                     cin >> rating;
-//                     cout << "Enter item ID: ";
-//                     cin >> itemID;
-//                     item.addBid(bidderName, bidAmount, rating, itemID);
-//                 } else {
-//                     cout << "You must be logged in to add a bid.\n";
-//                 }
-//              case 0:
-//                  cout << "Exiting program. Goodbye!\n";
-//                  return 0;
-
-//              default:
-//                  cout << "Invalid choice! Please try again.\n";
-//          }
-//      };

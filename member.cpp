@@ -1,8 +1,3 @@
-// #include "item.cpp" 
-// #include "item.h"
-// #include "admin-1.cpp"
-// #include "Rating and Bid/Bidding.cpp"
-// #include "Rating and Bid/Rating.cpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -10,7 +5,6 @@
 #include <string>
 #include <ctime>
 #include <iomanip>
-
 
 using namespace std;
 
@@ -36,6 +30,7 @@ public:
     string getPassword() const { return password; }
     string getFullName() const { return fullName; }
     string getEmail() const { return email; }
+    int getRating() const { return rating; }
     int getPhoneNumber() const { return phoneNumber; }
     int getCreditPoints() const { return creditPoints; }
     int getItemsWon() const { return itemsWon; }
@@ -64,32 +59,6 @@ public:
         cout << "\n1. Top up credits \n0. Exit";
     }
 
-    // void createItemListing(string id, string name, string category, string description, int startingBid, int minBuyerRating) {
-    //     time_t now = time(0);
-    //     time_t endTime = now + (7 * 24 * 60 * 60); // Auction ends in 7 days
-    //     item newItem(id, name, category, description, "", startingBid, startingBid, minBuyerRating, endTime, now);
-    //     itemsListed.push_back(newItem);
-    //     cout << "Item \"" << name << "\" has been listed successfully.\n";
-    // }
-
-    
-
-    // void placeBid(item &itm, int amount) {
-    //     if (amount <= creditPoints && amount > itm.getCurrentBid()) {
-    //         itm.setCurrentBid(amount);
-    //         itm.setHighestBidder(username);
-    //         itemsBid.push_back(itm.getID());
-    //         cout << "Successfully placed a bid of " << amount << " on item \"" << itm.getItemName() << "\".\n";
-    //     } else {
-    //         cout << "Insufficient credit points or bid amount is too low.\n";
-    //     }
-    // }
-
-    // void placeBidding(Bidding &bidding, double amount, double buyerRating) {
-    //     if (bidding.placeBid(username, amount, creditPoints, buyerRating)) {
-    //         creditPoints -= amount;
-    //     }
-    // }
 };
 
 Member* loadUser(const string &username, const string &password) {
@@ -186,7 +155,96 @@ void registerUser() {
     outFile.close();
 }
 
+// method of updating profile was written based on this source:
+// https://stackoverflow.com/questions/34507989/update-and-delete-data-from-file-in-c 
+void updateProfile(const string &currentUsername, const string &currentPassword) {
+    string fullName, phoneNumber, email, password;
+    bool updated = false;
 
+    cout << "\nUpdate Profile Information:\n";
+    cout << "1. Full Name\n2. Phone Number\n3. Email\n4. Password\n0. Cancel\n";
+    cout << "Enter your choice: ";
+    int choice;
+    cin >> choice;
+    cin.ignore(); // To handle newline character
+
+    switch (choice) {
+        case 1:
+            cout << "Enter new Full Name: ";
+            getline(cin, fullName);
+            break;
+        case 2:
+            cout << "Enter new Phone Number: ";
+            cin >> phoneNumber;
+            break;
+        case 3:
+            cout << "Enter new Email: ";
+            cin >> email;
+            break;
+        case 4:
+            cout << "Enter new Password: ";
+            cin >> password;
+            break;
+        case 0:
+            cout << "Operation cancelled!\n";
+            return;
+        default:
+            cout << "Invalid choice! Returning to menu...\n";
+            return;
+    }
+
+    ifstream inFile("users.txt");
+    ofstream tempFile("temp.txt");
+
+    if (!inFile || !tempFile) {
+        cerr << "Error: Unable to open data file.\n";
+        return;
+    }
+
+    string line, uname, pwd;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        getline(ss, uname, ',');
+        getline(ss, pwd, ',');
+
+        if (uname == currentUsername && pwd == currentPassword) {
+            // Update specific fields based on user's choice
+            string oldFullName, oldPhoneNumber, oldEmail, idNumber, rating, creditPoints;
+            getline(ss, oldFullName, ',');
+            getline(ss, oldPhoneNumber, ',');
+            getline(ss, oldEmail, ',');
+            getline(ss, idNumber, ',');
+            getline(ss, rating, ',');
+            getline(ss, creditPoints, ',');
+
+            if (choice == 1) oldFullName = fullName;
+            if (choice == 2) oldPhoneNumber = phoneNumber;
+            if (choice == 3) oldEmail = email;
+            if (choice == 4) pwd = password;
+
+            // Write updated record
+            tempFile << uname << "," << pwd << "," << oldFullName << "," 
+                     << oldPhoneNumber << "," << oldEmail << "," 
+                     << idNumber << "," << rating << "," << creditPoints << "\n";
+
+            updated = true;
+        } else {
+            // Write unmodified records
+            tempFile << line << "\n";
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    if (updated) {
+        remove("users.txt");
+        rename("temp.txt", "users.txt");
+        cout << "Profile updated successfully!\n";
+    } else {
+        cout << "User not found or incorrect credentials.\n";
+    }
+}
 
 // void topUpCredits(Member &member) {
 //     double currCP = member.getCreditPoints();
