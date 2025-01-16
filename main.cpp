@@ -1,26 +1,139 @@
-// #include <iostream>
-// #include <fstream>
-// #include <ctime>
-// using namespace std;
+#include <iostream>
+#include <fstream>
+#include <ctime>
+using namespace std;
 
-// #include "member.cpp"
-// #include "user.cpp"
-// #include "admin-1.cpp"
-// #include "item.cpp"
-// #include "item.h"
-// #include "Rating and Bid/bidding.cpp"
-// #include "Rating and Bid/rating.cpp"
+#include "member.cpp"
+#include "user.cpp"
+#include "admin-1.cpp"
+#include "item.cpp"
+#include "item.h"
+#include "Rating and Bid/bidding.cpp"
+#include "Rating and Bid/rating.cpp"
 
 // //TEST MAIN FOR USER CLASS SWITCH CASE
-//  int main() 
-//  {
-//     Item item("1", "Laptop", "Electronics", "Brand new laptop", "John", 1000, 1000, 4, 1635724800, 1635724800);
-    
-    
-    
-//      User currentUser;
-//      bool isLoggedIn = false;
-    
+
+void handleMember(Member &member) {
+    int choice;
+    do {
+        cout << "\nMember Menu:\n";
+        cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Log Out\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                member.viewDashboard();
+                break;
+            case 2:
+                int profChoice;
+                member.viewProfile();
+                cout << "Enter your Choice: ";
+                cin >> profChoice;
+                switch(profChoice){
+                    case 1:
+                        // topUpCredits(member);
+                        break;
+                    case 2:
+                        cout << "\nProfile Updated Successfully!\n";
+                        break;
+                    case 0:
+                        break;
+                }
+
+                break;
+            case 3: {
+                string ID, itemName, category, description, highestBidder, seller;
+                int startingBid, currentBid, minBuyerRating;
+                time_t endTime, startTime;
+
+                seller = member.getMemberName();
+                cout << "Enter Item ID: ";
+                cin >> ID;
+                cin.ignore();
+                cout << "Enter Item Name: ";
+                getline(cin, itemName);
+                cout << "Enter Category: ";
+                getline(cin, category);
+                cout << "Enter Description: ";
+                getline(cin, description);
+                highestBidder = "---";
+                cout << "Enter Starting Bid: ";
+                cin >> startingBid;
+                currentBid = 0;
+                cout << "Enter Minimum Buyer Rating: ";
+                cin >> minBuyerRating;
+                cout << "Enter bid length in days: ";
+                cin >> endTime;
+                cout << "Enter start time in days: ";
+                cin >> startTime;
+
+                item item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
+                // viewBidding();
+                break;
+            }
+            case 4:
+                cout << "Logging out...\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 4);
+}
+
+//NEW TEST MAIN
+int main() {
+    int userType;
+
+    while (true) {
+        welcomeScreen();
+        cin >> userType;
+
+        switch (userType) {
+            case 1:
+                cout << "Feature not implemented for this member type.\n";
+                break;
+
+            case 2: {
+                string username, password;
+                cout << "\nEnter username: ";
+                cin >> username;
+                cout << "Enter password: ";
+                cin >> password;
+
+                login(username, password);
+                if (isLoggedIn(username, password)) {
+                    Member *member = loadUser(username, password);
+                    if (member) {
+                        handleMember(*member);
+                        delete member;
+                    }
+                } else {
+                    cout << "Invalid username or password.\n";
+                }
+                break;
+            }
+
+            case 3:
+                adminView();
+                break;
+
+            case 4:
+                registerUser();
+                break;
+
+            case 0:
+                cout << "Exiting program. Goodbye!\n";
+                return 0;
+
+            default:
+                cout << "Invalid option. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+
 
 // //     
 // //     {

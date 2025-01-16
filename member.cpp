@@ -1,8 +1,8 @@
-#include "item.cpp" 
-#include "item.h"
-#include "admin-1.cpp"
-#include "Rating and Bid/Bidding.cpp"
-#include "Rating and Bid/Rating.cpp"
+// #include "item.cpp" 
+// #include "item.h"
+// #include "admin-1.cpp"
+// #include "Rating and Bid/Bidding.cpp"
+// #include "Rating and Bid/Rating.cpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -25,8 +25,8 @@ private:
     int rating;
     double creditPoints;
     int itemsWon;
-    vector<item> itemsListed; // Use the `item` class for listed items
-    vector<string> itemsBid; // Store IDs of items bid on
+    // vector<item> itemsListed; // Use the `item` class for listed items
+    // vector<string> itemsBid; // Store IDs of items bid on
 
 public:
     Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 0, double creditPoints = 0.0, int won = 0)
@@ -80,20 +80,12 @@ public:
     cout << "\nYour active item listings:\n";
     cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-    // for (size_t i = 0; i < itemsListed.size(); ++i) {
-    //     item &itm = itemsListed[i];
-    //     time_t endTime = itm.getEndTime();
-    //     cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
-    // }
+   
 
     cout << "\nYour active bids:\n";
     cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-    // for (size_t i = 0; i < itemsBid.size(); ++i) {
-    //     item &itm = itemsListed[i];
-    //     time_t endTime = itm.getEndTime();
-    //     cout << itm.getID() << "   | "<< itm.getItemName() << " | " << itm.getCategory() << " | " << (itm.getCurrentBid() == itm.getStartingBid() ? "No Bids" : to_string(itm.getCurrentBid())) << " | " << itm.getHighestBidder()<< " | " << asctime(localtime(&endTime));
-    // }
+    
 
     int choice;
     cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Return to Main Menu\n";
@@ -102,26 +94,26 @@ public:
 
     switch (choice) {
         case 1: {
-            int itemID;
+            // int itemID;
             cout << "Enter the number of the item listing to view details: ";
-            cin >> itemID;
-            if (itemID > 0 && itemID <= itemsListed.size()) {
-                itemsListed[itemID - 1].viewBidding();
-            } else {
-                cout << "Invalid item selection.\n";
-            }
+            // cin >> itemID;
+            // if (itemID > 0 && itemID <= itemsListed.size()) {
+            //     itemsListed[itemID - 1].viewBidding();
+            // } else {
+            //     cout << "Invalid item selection.\n";
+            // }
             break;
         }
         case 2: {
-            int bidID;
+            // int bidID;
             cout << "Enter the number of the bid to view details: ";
-            cin >> bidID;
-            if (bidID > 0 && bidID <= itemsBid.size()) {
-                item &itm = itemsListed[bidID - 1];
-                itm.viewBidding();
-            } else {
-                cout << "Invalid bid selection.\n";
-            }
+            // cin >> bidID;
+            // if (bidID > 0 && bidID <= itemsBid.size()) {
+            //     item &itm = itemsListed[bidID - 1];
+            //     itm.viewBidding();
+            // } else {
+            //     cout << "Invalid bid selection.\n";
+            // }
             break;
         }
 
@@ -267,122 +259,6 @@ void welcomeScreen() {
 //     cout << "Successfully added 1 credit point.\n";
 // }
 
-void handleMember(Member &member) {
-    int choice;
-    do {
-        cout << "\nMember Menu:\n";
-        cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Log Out\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
-        switch (choice) {
-            case 1:
-                member.viewDashboard();
-                break;
-            case 2:
-                int profChoice;
-                member.viewProfile();
-                cout << "Enter your Choice: ";
-                cin >> profChoice;
-                switch(profChoice){
-                    case 1:
-                        // topUpCredits(member);
-                        break;
-                    case 2:
-                        cout << "\nProfile Updated Successfully!\n";
-                        break;
-                    case 0:
-                        break;
-                }
 
-                break;
-            case 3: {
-                string ID, itemName, category, description, highestBidder, seller;
-                int startingBid, currentBid, minBuyerRating;
-                time_t endTime, startTime;
 
-                seller = member.getMemberName();
-                cout << "Enter Item ID: ";
-                cin >> ID;
-                cin.ignore();
-                cout << "Enter Item Name: ";
-                getline(cin, itemName);
-                cout << "Enter Category: ";
-                getline(cin, category);
-                cout << "Enter Description: ";
-                getline(cin, description);
-                highestBidder = "---";
-                cout << "Enter Starting Bid: ";
-                cin >> startingBid;
-                currentBid = 0;
-                cout << "Enter Minimum Buyer Rating: ";
-                cin >> minBuyerRating;
-                cout << "Enter bid length in days: ";
-                cin >> endTime;
-                cout << "Enter start time in days: ";
-                cin >> startTime;
 
-                new item (ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
-                viewBidding();
-                break;
-            }
-            case 4:
-                cout << "Logging out...\n";
-                break;
-            default:
-                cout << "Invalid choice. Please try again.\n";
-        }
-    } while (choice != 4);
-}
-
-//NEW TEST MAIN
-int main() {
-    int userType;
-
-    while (true) {
-        welcomeScreen();
-        cin >> userType;
-
-        switch (userType) {
-            case 1:
-                cout << "Feature not implemented for this member type.\n";
-                break;
-
-            case 2: {
-                string username, password;
-                cout << "\nEnter username: ";
-                cin >> username;
-                cout << "Enter password: ";
-                cin >> password;
-
-                login(username, password);
-                if (isLoggedIn(username, password)) {
-                    Member *member = loadUser(username, password);
-                    if (member) {
-                        handleMember(*member);
-                        delete member;
-                    }
-                } else {
-                    cout << "Invalid username or password.\n";
-                }
-                break;
-            }
-
-            case 3:
-                adminView();
-                break;
-
-            case 4:
-                registerUser();
-                break;
-
-            case 0:
-                cout << "Exiting program. Goodbye!\n";
-                return 0;
-
-            default:
-                cout << "Invalid option. Please try again.\n";
-        }
-    }
-
-    return 0;
-}

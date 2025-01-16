@@ -102,16 +102,16 @@ void viewBidding() {
 
 // int main()
 // {
-//     item zero("0","0","0","0","0","0",0,0,0,0,0);
+//     // item zero("0","0","0","0","0","0",0,0,0,0,0);
 //     item aiyesg("2","item2","category2","description2","bidder2","bidder1",200,200,3,1610000000,1600000000);
-//     item item3("3","item3","category3","description3","bidder3","bidder4",300,300,2,1610000000,1600000000);
+//     // item item3("3","item3","category3","description3","bidder3","bidder4",300,300,2,1610000000,1600000000);
     
-//     // aiyesg.addBid("bidder2", 250, 4, "2");   
-//     // item3.addBid("bidder3", 350, 3, "3");
+//     aiyesg.addBid("bidder5", 250, 4, "3");   
+//     // item3.addBid("bidder6", 350, 3, "2");
 //     // aiyesg.updateListing(aiyesg);
 //     // item3.updateListing(item3);
 
-//     zero.viewBidding();
+//     // zero.viewBidding();
 //     aiyesg.viewBidding();
     
 //     return 0;
