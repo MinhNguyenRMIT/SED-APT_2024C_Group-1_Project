@@ -186,14 +186,7 @@ void registerUser() {
     outFile.close();
 }
 
-void welcomeScreen() {
-    
-    cout << "-----------------------------------\n";
-    cout << "AUCTION APPLICATION\n";
-    cout << "-----------------------------------\n";
-    cout << "1. Guest\n2. Member\n3. Admin\n4. Register as Member\n0. Exit\n";
-    cout << "Enter your choice: ";
-}
+
 
 // void topUpCredits(Member &member) {
 //     double currCP = member.getCreditPoints();

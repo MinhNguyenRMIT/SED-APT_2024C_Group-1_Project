@@ -53,6 +53,7 @@ void readItems() {
 const string Admin::adminUser = "admin";
 const string Admin::adminPass = "admin";
 
+//Admin Menu screen
 void adminView() {
     string inputUser, inputPass;
     cout << "Enter Admin Username: ";

@@ -11,15 +11,71 @@ using namespace std;
 #include "Rating and Bid/bidding.cpp"
 #include "Rating and Bid/rating.cpp"
 
-// //TEST MAIN FOR USER CLASS SWITCH CASE
+// Welcome Screen for all users
+void welcomeScreen() {
+    
+    cout << "-----------------------------------\n";
+    cout << "AUCTION APPLICATION\n";
+    cout << "-----------------------------------\n";
+    cout << "1. Guest\n2. Member\n3. Admin\n4. Register as Member\n0. Exit\n";
+    cout << "Enter your choice: ";
+}
 
-void viewDashboard() {
+// Auction Dashboard Screen
+void viewDashboard(const string &username) {
     cout << "\n--- Dashboard ---\n";
 
     cout << "\nYour active item listings:\n";
     cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-   
+    ifstream inFile("item.txt");
+    if (!inFile) {
+        cerr << "Error: Unable to open item.txt.\n";
+        return;
+    }
+
+    string line;
+    int itemCount = 0;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string ID, itemName, category, description, highestBidder, seller;
+        int startingBid, currentBid, minBuyerRating;
+        time_t endTime, startTime;
+
+        // Parse the line
+        getline(ss, ID, ',');
+        getline(ss, itemName, ',');
+        getline(ss, category, ',');
+        getline(ss, description, ',');
+        getline(ss, highestBidder, ',');
+        getline(ss, seller, ',');
+        ss >> startingBid;
+        ss.ignore();
+        ss >> currentBid;
+        ss.ignore();
+        ss >> minBuyerRating;
+        ss.ignore();
+        ss >> endTime;
+        ss.ignore();
+        ss >> startTime;
+
+        // Check if the seller matches the current user
+        if (seller == username) {
+            itemCount++;
+            cout << itemCount << "   | " << itemName
+                 << " | " << category
+                 << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
+                 << "      | " << highestBidder
+                 << " | " << asctime(localtime(&endTime));
+        }
+    }
+
+    inFile.close();
+
+    // Handle case when no items are found
+    if (itemCount == 0) {
+        cout << "No active item listings found.\n";
+    }
 
     cout << "\nYour active bids:\n";
     cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
@@ -63,6 +119,7 @@ void viewDashboard() {
     } 
 }
 
+// Member's Main Menu screen
 void handleMember(Member &member) {
     int choice;
     do {
@@ -72,7 +129,7 @@ void handleMember(Member &member) {
         cin >> choice;
         switch (choice) {
             case 1:
-                viewDashboard();
+                viewDashboard(member.getMemberName());
                 break;
             case 2:
                 int profChoice;
@@ -143,7 +200,7 @@ void handleMember(Member &member) {
 //NEW TEST MAIN
 int main() {
     int userType;
-
+    
     while (true) {
         welcomeScreen();
         cin >> userType;
