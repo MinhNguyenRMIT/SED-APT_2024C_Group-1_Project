@@ -6,11 +6,11 @@ using namespace std;
 
 class Admin {
 private:
-    static const string adminUser; // Static credentials for the admin
+    static const string adminUser; 
     static const string adminPass;
 
 public:
-    Admin() = default; // Default constructor
+    Admin() = default; 
 
     static bool isAdmin(const string &inputUser, const string &inputPass) {
         if (inputUser == adminUser && inputPass == adminPass) {
