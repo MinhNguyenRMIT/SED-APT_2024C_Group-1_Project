@@ -8,8 +8,8 @@ using namespace std;
 #include "admin-1.cpp"
 #include "item.cpp"
 #include "item.h"
-#include "Rating and Bid/bidding.cpp"
-#include "Rating and Bid/rating.cpp"
+#include "bidding.cpp"
+#include "rating.cpp"
 
 // Welcome Screen for all users
 void welcomeScreen() {
