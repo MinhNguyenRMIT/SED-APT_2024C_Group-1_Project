@@ -115,25 +115,21 @@ void item::addBid(const string& bidderName, int bidAmount, int rating, const str
             cout << "You do not meet the minimum buyer rating requirement" << endl;
         } else if (bidAmount <= currentBid) {
             cout << "Your bid is lower than the current bid" << endl;
-        }
-    } else if (itemID != ID) {
-        cout << "Item ID does not match" << endl;
-    } else if (localtime(&current_time) >= localtime(&endTime)) {
-        cout << "Auction has ended" << endl;
-    }
-    }
-    else if (itemID!=ID){
-        cout<<"Item ID does not match"<<endl;
-    }
-    else if (localtime(&current_time) >= localtime(&endTime)){
-        cout<<"Auction has ended"<<endl;
-    
+        } else if (itemID != ID) {
+            cout << "Item ID does not match" << endl;
+        } else if (localtime(&current_time) >= localtime(&endTime)) {
+            cout << "Auction has ended" << endl;
+        } else if (itemID!=ID) {
+            cout<<"Item ID does not match"<<endl;
+        } else if (localtime(&current_time) >= localtime(&endTime)){
+            cout<<"Auction has ended"<<endl;
+        };
+    };
+};   
 
-};
-void concludeAuction(item i){
-    if (localtime(&current_time) == localtime(&i.endTime))
-    {
-        cout<<"Auction has ended"<<endl;
+void item::concludeAuction(item i){
+    if (localtime(&current_time) == localtime(&i.endTime)){
+    cout<<"Auction has ended"<<endl;
     ifstream infile("item.txt");
     ofstream tempFile("temp.txt");
     string line;
@@ -147,44 +143,16 @@ void concludeAuction(item i){
     remove("item.txt");
     rename("temp.txt", "item.txt");
         
-    }else{
+    } else {
         cout<<"Auction has not ended"<<endl;
-    
-    
-};
+    };
 };
 
-
-
-
-
-
-
-int main()
-{
-   
-
-    item zero("0","0","0","0","0",0,0,0,0,0);
-    item aiyesg("2","item2","category2","description2","bidder2",200,200,3,1610000000,1600000000);
-    item item3("3","item3","category3","description3","bidder3",300,300,2,1610000000,1600000000);
-    
-    aiyesg.addBid("bidder2", 250, 4, "2");   
-    item3.addBid("bidder3", 350, 3, "3");
-    aiyesg.updateListing(aiyesg);
-    item3.updateListing(item3);
-    
-   
-    return 0;
-}
-
-
-void item::concludeAuction(item i) {
-    if (localtime(&current_time) == localtime(&i.endTime)) {
-        cout << "Auction has ended" << endl;
-    }
-}
-
-
+// void item::concludeAuction(item i) {
+//     if (localtime(&current_time) == localtime(&i.endTime)) {
+//         cout << "Auction has ended" << endl;
+//     }
+// }
 
 void viewBidding() {
     ifstream file("item.txt");
@@ -198,43 +166,44 @@ void viewBidding() {
         cout << "Error opening file" << endl;
     }
 }
+
 void activeBids() {
     time_t current_time;
     time(&current_time);
-std::time(nullptr)  ;  
-ifstream file("item.txt");
-    if (file.is_open()) {
-        string line;
-        while (getline(file, line)) {
-        stringstream ss(line);
-        string ID, itemName, category, description, highestBidder, seller;
-        int startingBid, currentBid, minBuyerRating;
-        time_t endTime, startTime;
+    std::time(nullptr)  ;  
+    ifstream file("item.txt");
+        if (file.is_open()) {
+            string line;
+            while (getline(file, line)) {
+            stringstream ss(line);
+            string ID, itemName, category, description, highestBidder, seller;
+            int startingBid, currentBid, minBuyerRating;
+            time_t endTime, startTime;
 
-        // Parse the line
-        getline(ss, ID, ',');
-        
-        getline(ss, itemName, ',');
-        getline(ss, category, ',');
-        getline(ss, description, ',');
-        getline(ss, highestBidder, ',');
-        getline(ss, seller, ',');
-        ss >> startingBid;
-        ss.ignore();
-        ss >> currentBid;
-        ss.ignore();
-        ss >> minBuyerRating;
-        ss.ignore();
-        ss >> endTime;
-        ss.ignore();
-        ss >> startTime;
-            if (difftime(endTime, std::time(nullptr)) > 0) {
-                string itemId;
-                item* loadedItem = loadItem(itemId);
-                if (loadedItem) {
-                        loadedItem->viewBidding(); 
-                    delete loadedItem;        
-            }
+            // Parse the line
+            getline(ss, ID, ',');
+            
+            getline(ss, itemName, ',');
+            getline(ss, category, ',');
+            getline(ss, description, ',');
+            getline(ss, highestBidder, ',');
+            getline(ss, seller, ',');
+            ss >> startingBid;
+            ss.ignore();
+            ss >> currentBid;
+            ss.ignore();
+            ss >> minBuyerRating;
+            ss.ignore();
+            ss >> endTime;
+            ss.ignore();
+            ss >> startTime;
+                if (difftime(endTime, std::time(nullptr)) > 0) {
+                    string itemId;
+                    item* loadedItem = loadItem(itemId);
+                    if (loadedItem) {
+                            loadedItem->viewBidding(); 
+                        delete loadedItem;        
+                }
             }
         }
         file.close();

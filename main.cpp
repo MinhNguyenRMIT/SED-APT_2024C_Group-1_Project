@@ -248,7 +248,7 @@ void viewDashboard(const string &username) {
 void handleMember(Member &member) {
     int choice;
     do {
-        cout << "----------------------------------";
+        cout << "\n----------------------------------";
         cout << "\nMember Menu:\n";
         cout << "----------------------------------\n";
         cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Update Profile\n5. Log Out\n";
