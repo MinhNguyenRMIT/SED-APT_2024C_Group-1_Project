@@ -43,9 +43,9 @@ public:
         std::cout << "  Seller Rating: " << std::fixed << std::setprecision(2) << sellerRating << "\n";
     }
 
-    // Update user.txt file
+    // Update users.txt file
     void updateUserFile(const std::string& role) {
-        std::ifstream inFile("user.txt");
+        std::ifstream inFile("users.txt");
         std::ofstream outFile("user_temp.txt");
         std::string line;
 
@@ -82,11 +82,12 @@ public:
         outFile.close();
 
         // Replace the old file with the updated file
-        std::remove("user.txt");
-        std::rename("user_temp.txt", "user.txt");
+        std::remove("users.txt");
+        std::rename("user_temp.txt", "users.txt");
     }
 };
-a
+
+
 // int main() {
 //     // Example usage
 //     Rating seller("JaneSeller");

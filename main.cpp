@@ -29,16 +29,15 @@ void viewDashboard(const string &username) {
     cout << "\nYour active item listings:\n";
     cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
-    ifstream inFile("item.txt");
-    if (!inFile) {
+    ifstream inFileS("item.txt");
+    if (!inFileS) {
         cerr << "Error: Unable to open item.txt.\n";
         return;
-    }
+    };
 
-    string line;
-    int itemCount = 0;
-    while (getline(inFile, line)) {
-        stringstream ss(line);
+    string sLine;
+    while (getline(inFileS, sLine)) {
+        stringstream ss(sLine);
         string ID, itemName, category, description, highestBidder, seller;
         int startingBid, currentBid, minBuyerRating;
         time_t endTime, startTime;
@@ -62,8 +61,51 @@ void viewDashboard(const string &username) {
 
         // Check if the seller matches the current user
         if (seller == username) {
-            itemCount++;
-            cout << itemCount << "   | " << itemName
+            cout << ID << "   | " << itemName
+                 << " | " << category
+                 << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
+                 << "      | " << highestBidder
+                 << " | " << asctime(localtime(&endTime));
+        }
+    }
+    inFileS.close();
+
+    cout << "\nYour active bids:\n";
+    cout << "No. | Name     | Category      | Your Bid    | Current Bid     | End Date & Time\n";
+    cout << "----------------------------------------------------------------------------------------\n";
+    ifstream inFileH("item.txt");
+    if (!inFileH) {
+        cerr << "Error: Unable to open item.txt.\n";
+        return;
+    };
+
+    string hLine;
+    while (getline(inFileH, hLine)) {
+        stringstream ss(hLine);
+        string ID, itemName, category, description, highestBidder, seller;
+        int startingBid, currentBid, minBuyerRating;
+        time_t endTime, startTime;
+
+        // Parse the line
+        getline(ss, ID, ',');
+        getline(ss, itemName, ',');
+        getline(ss, category, ',');
+        getline(ss, description, ',');
+        getline(ss, highestBidder, ',');
+        getline(ss, seller, ',');
+        ss >> startingBid;
+        ss.ignore();
+        ss >> currentBid;
+        ss.ignore();
+        ss >> minBuyerRating;
+        ss.ignore();
+        ss >> endTime;
+        ss.ignore();
+        ss >> startTime;
+
+        // Check if the highest bidder matches the current user
+        if (highestBidder == username) {
+            cout << ID << "   | " << itemName
                  << " | " << category
                  << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
                  << "      | " << highestBidder
@@ -71,20 +113,10 @@ void viewDashboard(const string &username) {
         }
     }
 
-    inFile.close();
-
-    // Handle case when no items are found
-    if (itemCount == 0) {
-        cout << "No active item listings found.\n";
-    }
-
-    cout << "\nYour active bids:\n";
-    cout << "No. | Name            | Category      | Your Bid    | Current Bid     | End Date & Time\n";
-    cout << "----------------------------------------------------------------------------------------\n";
-    
+    inFileH.close();
 
     int choice;
-    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. Rate an Auction\n5. Return to Main Menu\n";
+    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. View Ratings\n5. Rate a Buyer\n6. Rate a Seller\n7. Return to Main Menu\n";
     cout << "Enter your choice: ";
     cin >> choice;
 
@@ -104,6 +136,7 @@ void viewDashboard(const string &username) {
 
         case 2: {
             cout << "Enter the number of the bid to view details: ";
+
             break;
         }
 
@@ -158,10 +191,47 @@ void viewDashboard(const string &username) {
             break;
         }
 
-        case 4:
-           cout << "Rating!\n";
-           break;
-        case 5:
+        case 4:{
+            Rating userRating(username);
+            userRating.displayRatings();
+            break;
+        }
+
+        case 5:{
+            double rating;
+            string buyer;
+            cout << "Enter Buyer's Username: ";
+            cin >> buyer;
+            cout << "Rate the Buyer (1-5): ";
+            cin >> rating;
+            while (rating < 1 || rating > 5) {
+                cout << "Invalid rating. Please rate between 1 and 5: ";
+                cin >> rating;
+            }
+            Rating buyerRating(buyer);
+            buyerRating.rateBuyer(rating);
+            cout << "Buyer has been rated successfully!\n";
+            break;
+        }
+
+        case 6:{
+            double rating;
+            string seller;
+            cout << "Enter Seller's Username: ";
+            cin >> seller;
+            cout << "Rate the Seller (1-5): ";
+            cin >> rating;
+            while (rating < 1 || rating > 5) {
+                cout << "Invalid rating. Please rate between 1 and 5: ";
+                cin >> rating;
+            }
+            Rating sellerRating(seller);
+            sellerRating.rateSeller(rating);
+            cout << "Seller has been rated successfully!\n";
+            break;
+        }
+
+        case 7:
             cout << "Returning to main menu...\n";
             break;
 
@@ -176,14 +246,18 @@ void viewDashboard(const string &username) {
 void handleMember(Member &member) {
     int choice;
     do {
+        cout << "----------------------------------";
         cout << "\nMember Menu:\n";
+        cout << "----------------------------------\n";
         cout << "1. View Dashboard\n2. View Profile\n3. Create Item Listing\n4. Update Profile\n5. Log Out\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice) {
+            // 1. View Dashboard
             case 1:
                 viewDashboard(member.getMemberName());
                 break;
+            //2. View Profile
             case 2:
                 int profChoice;
                 member.viewProfile();
@@ -191,16 +265,18 @@ void handleMember(Member &member) {
                 cin >> profChoice;
                 switch(profChoice){
                     case 1:
-                        // topUpCredits(member);
+                        topUpCredits(member);
                         break;
                     case 2:
-                        cout << "\nProfile Updated Successfully!\n";
+                        updateProfile(member.getMemberName(), member.getPassword());    
                         break;
                     case 0:
+                        cout << "Returning to main menu...";
                         break;
                 }
 
                 break;
+            // 3. Create Item Listing   
             case 3: {
                 string ID, itemName, category, description, highestBidder, seller;
                 int startingBid, currentBid, minBuyerRating;

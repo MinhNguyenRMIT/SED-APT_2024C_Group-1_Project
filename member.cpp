@@ -17,7 +17,7 @@ private:
     string email;
     int id;
     int rating;
-    double creditPoints;
+    int creditPoints;
     int itemsWon;
     // vector<item> itemsListed; // Use the `item` class for listed items
     // vector<string> itemsBid; // Store IDs of items bid on
@@ -56,7 +56,7 @@ public:
         cout << "Items Won: " << itemsWon << "\n";
         cout << "-----------------------------------\n";
 
-        cout << "\n1. Top up credits \n0. Exit\n";
+        cout << "\n1. Top up credits\n2. Update Proifle\n0. Exit\n";
     }
 
 };
@@ -67,27 +67,28 @@ Member* loadUser(const string &username, const string &password) {
         cerr << "Error: Unable to open users.txt.\n";
         return nullptr;
     }
-
+    // Search through data file
     string line, uname, pwd;
     while (getline(inFile, line)) {
         stringstream ss(line);
         getline(ss, uname, ',');
         getline(ss, pwd, ',');
 
+        // Load current user based on their logged in credentials
         if (uname == username && pwd == password) {
             string fullName, email;
             int idNumber, phoneNumber, rating, creditPoints, itemsWon;
 
             getline(ss, fullName, ',');
             ss >> phoneNumber;
-            ss.ignore();  // Ignore the comma
+            ss.ignore();  
             getline(ss, email, ',');
             ss >> idNumber;
-            ss.ignore();  // Ignore the comma
+            ss.ignore();  
             ss >> rating;
-            ss.ignore();  // Ignore the comma
+            ss.ignore();  
             ss >> creditPoints;
-            ss.ignore();  // Ignore the comma
+            ss.ignore();  
             ss >> itemsWon;
 
             inFile.close();
@@ -97,7 +98,6 @@ Member* loadUser(const string &username, const string &password) {
     inFile.close();
     return nullptr;
 }
-
 
 bool isLoggedIn(const string &inputUsername, const string &inputPassword) {
     ifstream inFile("users.txt");
@@ -149,6 +149,7 @@ void registerUser() {
     cout << "Enter ID Number: ";
     cin >> idNumber;
 
+    // Write new user data into file
     ofstream outFile("users.txt", ios::app);
     if (outFile) {
         outFile << uname << "," << pwd << "," << fname << "," << phone << "," << mail << "," << idNumber << ",3,0.0,0\n";
@@ -170,8 +171,9 @@ void updateProfile(const string &currentUsername, const string &currentPassword)
     cout << "Enter your choice: ";
     int choice;
     cin >> choice;
-    cin.ignore(); // To handle newline character
+    cin.ignore(); 
 
+    // User's choice for which data field to change
     switch (choice) {
         case 1:
             cout << "Enter new Full Name: ";
@@ -205,6 +207,7 @@ void updateProfile(const string &currentUsername, const string &currentPassword)
         return;
     }
 
+    // Searches user data based on credentials 
     string line, uname, pwd;
     while (getline(inFile, line)) {
         stringstream ss(line);
@@ -214,6 +217,8 @@ void updateProfile(const string &currentUsername, const string &currentPassword)
         if (uname == currentUsername && pwd == currentPassword) {
             // Update specific fields based on user's choice
             string oldFullName, oldPhoneNumber, oldEmail, idNumber, rating, creditPoints;
+
+            // Get current user's current information
             getline(ss, oldFullName, ',');
             getline(ss, oldPhoneNumber, ',');
             getline(ss, oldEmail, ',');
@@ -221,12 +226,13 @@ void updateProfile(const string &currentUsername, const string &currentPassword)
             getline(ss, rating, ',');
             getline(ss, creditPoints, ',');
 
+            // Apply updated data depending on user's choice
             if (choice == 1) oldFullName = fullName;
             if (choice == 2) oldPhoneNumber = phoneNumber;
             if (choice == 3) oldEmail = email;
             if (choice == 4) pwd = password;
 
-            // Write updated record
+            // Write updated record into user.txt file
             tempFile << uname << "," << pwd << "," << oldFullName << "," 
                      << oldPhoneNumber << "," << oldEmail << "," 
                      << idNumber << "," << rating << "," << creditPoints << "\n";
@@ -250,12 +256,33 @@ void updateProfile(const string &currentUsername, const string &currentPassword)
     }
 }
 
-// void topUpCredits(Member &member) {
-//     double currCP = member.getCreditPoints();
-//     currCP += 1.0;
-//     member.getCreditPoints = currCP;
-//     cout << "Successfully added 1 credit point.\n";
-// }
+void topUpCredits(Member member) {
+    // ifstream inFile("users.txt");
+    // ofstream tempFile("temp.txt");
+
+    
+
+    // if (!inFile || !tempFile) {
+    //     cerr << "Error: Unable to open data file.\n";
+    //     return;
+    // }
+
+    // // Searches user data based on credentials 
+    // string line, uname, pwd;
+    // while (getline(inFile, line)) {
+    //     stringstream ss(line);
+    //     getline(ss, uname, ',');
+    //     getline(ss, pwd, ',');
+
+    //     if (uname == member.getUsername() && pwd == member.getPassword()) {
+    //          int currCP;
+    // }        
+
+    int currCP = member.getCreditPoints();
+    currCP += 1;
+    member.setCreditPoints(currCP);
+    cout << "Successfully added 1 credit point.\n";
+}
 
 
 
