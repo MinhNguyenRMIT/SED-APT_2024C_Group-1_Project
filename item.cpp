@@ -133,25 +133,37 @@ void item::updateListing(item i) {
 
 
 void item::addBid(const string& bidderName, int bidAmount, int rating, const string& itemID) {
-    if (itemID == ID && localtime(&current_time) < localtime(&endTime)) {
-        if (bidAmount > currentBid && rating >= minBuyerRating) {
+    // Check if the item ID matches
+    if (itemID != ID) {
+        cout << "Item ID does not match." << endl;
+        return;
+    }
+
+    // Check if the auction has ended
+    if (difftime(endTime, current_time) <= 0) {
+        cout << "Auction has ended." << endl;
+        return;
+    }
+
+    // Check if the bid amount is valid
+    if (bidAmount > currentBid) {
+        // Check if the buyer meets the rating requirement
+        if (rating >= minBuyerRating) {
             currentBid = bidAmount;
             highestBidder = bidderName;
-        } else if (bidAmount > currentBid && rating < minBuyerRating) {
-            cout << "You do not meet the minimum buyer rating requirement" << endl;
-        } else if (bidAmount <= currentBid) {
-            cout << "Your bid is lower than the current bid" << endl;
-        } else if (itemID != ID) {
-            cout << "Item ID does not match" << endl;
-        } else if (localtime(&current_time) >= localtime(&endTime)) {
-            cout << "Auction has ended" << endl;
-        } else if (itemID!=ID) {
-            cout<<"Item ID does not match"<<endl;
-        } else if (localtime(&current_time) >= localtime(&endTime)){
-            cout<<"Auction has ended"<<endl;
-        };
-    };
-};   
+            cout << "Bid placed successfully! Current highest bid: " << currentBid 
+                 << " by " << highestBidder << endl;
+
+            // Update the item listing file with the new bid details
+            updateListing(*this);
+        } else {
+            cout << "You do not meet the minimum buyer rating requirement." << endl;
+        }
+    } else {
+        cout << "Your bid is lower than or equal to the current bid." << endl;
+    }
+}
+  
 
 void item::concludeAuction(item i){
     if (localtime(&current_time) == localtime(&i.endTime)){
