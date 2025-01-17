@@ -39,7 +39,7 @@ time_t item::getEndTime() { return endTime; }
 time_t item::getStartTime() { return startTime; }
 
 void item::viewBidding() {
-    cout << "-------------------------------------------------------" << endl;
+    cout << "\n-------------------------------------------------------" << endl;
     cout << "Item ID: " << ID << endl;
     cout << "Item Name: " << itemName << endl;
     cout << "Category: " << category << endl;
@@ -51,7 +51,7 @@ void item::viewBidding() {
     cout << "Minimum Buyer Rating: " << minBuyerRating << endl;
     cout << "End Time: " << ctime(&endTime);
     cout << "Start Time: " << ctime(&startTime);
-    cout << "-------------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------\n" << endl;
 }
 
 item* loadItem(const string &itemId) {
@@ -86,7 +86,7 @@ item* loadItem(const string &itemId) {
             ss >> startTime;
 
             inFile.close();
-            return new item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime+time(nullptr), startTime);
+            return new item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
         }
     }
 
@@ -96,15 +96,41 @@ item* loadItem(const string &itemId) {
 
 
 void item::updateListing(item i) {
-    ofstream file;
-    file.open("item.txt", ios::app);
-    if (file.is_open()) {
-        file << i.ID << "," << i.itemName << "," << i.category << "," << i.description << "," << i.highestBidder << "," << i.seller << "," << i.startingBid << "," << i.currentBid << "," << i.minBuyerRating << "," << i.endTime << "," << i.startTime << endl;
-        file.close();
-    } else {
-        cout << "Error opening file" << endl;
+    ifstream inFile("item.txt");
+    ofstream outFile("temp.txt");
+    string line;
+
+    if (!inFile || !outFile) {
+        cerr << "Error: Unable to open file for updating.\n";
+        return;
     }
+
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string ID;
+        getline(ss, ID, ',');
+
+        if (ID == i.getID()) {
+            // Replace with updated item details
+            outFile << i.ID << "," << i.itemName << "," << i.category << "," << i.description << ","
+                    << i.highestBidder << "," << i.seller << "," << i.startingBid << "," 
+                    << i.currentBid << "," << i.minBuyerRating << "," << i.endTime << "," 
+                    << i.startTime << endl;
+        } else {
+            // Write the existing line as is
+            outFile << line << endl;
+        }
+    }
+
+    inFile.close();
+    outFile.close();
+
+    // Replace the old file with the updated file
+    remove("item.txt");
+    rename("temp.txt", "item.txt");
 }
+
+
 
 void item::addBid(const string& bidderName, int bidAmount, int rating, const string& itemID) {
     if (itemID == ID && localtime(&current_time) < localtime(&endTime)) {

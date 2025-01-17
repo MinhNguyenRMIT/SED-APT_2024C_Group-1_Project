@@ -20,8 +20,6 @@ private:
     int rating;
     int creditPoints;
     int itemsWon;
-    // vector<item> itemsListed; // Use the `item` class for listed items
-    // vector<string> itemsBid; // Store IDs of items bid on
 
 public:
     Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 3, int creditPoints = 0, int won = 0)

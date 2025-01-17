@@ -25,10 +25,53 @@ void welcomeScreen() {
 
 // Auction Dashboard Screen
 void viewDashboard(const string &username) {
-    cout << "\n--- Dashboard ---\n";
+    cout << "\n----- Dashboard -----\n";
+
+    cout << "\n--- GLOBAL AUCTIONS -\n";
+    cout << "No. | Name      | Category               | Current Bid | Auctioner   | End Date & Time\n";
+    cout << "----------------------------------------------------------------------------------------\n";
+    ifstream inFileG("item.txt");
+    if (!inFileG) {
+        cerr << "Error: Unable to open item.txt.\n";
+        return;
+    };
+
+    string gLine;
+    while (getline(inFileG, gLine)) {
+        stringstream ss(gLine);
+        string ID, itemName, category, description, highestBidder, seller;
+        int startingBid, currentBid, minBuyerRating;
+        time_t endTime, startTime;
+
+        getline(ss, ID, ',');
+        getline(ss, itemName, ',');
+        getline(ss, category, ',');
+        getline(ss, description, ',');
+        getline(ss, highestBidder, ',');
+        getline(ss, seller, ',');
+        ss >> startingBid;
+        ss.ignore();
+        ss >> currentBid;
+        ss.ignore();
+        ss >> minBuyerRating;
+        ss.ignore();
+        ss >> endTime;
+        ss.ignore();
+        ss >> startTime;
+
+        cout << ID << "   | " << itemName
+                << " | " << category
+                << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
+                << "      | " << seller
+                << " | " << asctime(localtime(&endTime));
+        
+    }
+
+    inFileG.close();
+
 
     cout << "\nYour active item listings:\n";
-    cout << "No. | Name            | Category      | Current Bid | Current Bidder  | End Date & Time\n";
+    cout << "No. | Name      | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
     ifstream inFileS("item.txt");
     if (!inFileS) {
@@ -72,7 +115,7 @@ void viewDashboard(const string &username) {
     inFileS.close();
 
     cout << "\nYour active bids:\n";
-    cout << "No. | Name     | Category      | Your Bid    | Current Bid     | End Date & Time\n";
+    cout << "No. | Name      | Category      | Your Bid    | Current Bid     | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
     ifstream inFileH("item.txt");
     if (!inFileH) {
@@ -138,7 +181,6 @@ void viewDashboard(const string &username) {
         case 2: {
             cout << "Enter the number of the bid to view details: ";
             activeBids();
-
             break;
         }
 
@@ -160,7 +202,7 @@ void viewDashboard(const string &username) {
             currBidderName = username;
             rate = loadedMember->getRating();
             double bidderCP = loadedMember->getCreditPoints();
-            delete loadedMember;  // No longer needed after extracting required info
+            delete loadedMember;  
 
             cout << "\nEnter Auction ID you wish to bid: ";
             cin >> newItemId;
