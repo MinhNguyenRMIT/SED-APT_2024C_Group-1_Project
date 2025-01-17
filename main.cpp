@@ -23,13 +23,10 @@ void welcomeScreen() {
     cout << "Enter your choice: ";
 }
 
-// Auction Dashboard Screen
-void viewDashboard(const string &username) {
-    cout << "\n----- Dashboard -----\n";
-
-    cout << "\n--- GLOBAL AUCTIONS -\n";
-    cout << "No. | Name      | Category               | Current Bid | Auctioner   | End Date & Time\n";
-    cout << "----------------------------------------------------------------------------------------\n";
+void globalAuctionScreen(){
+    cout << "\n--- GLOBAL AUCTIONS ---\n";
+    cout << "ID  | Name      | Category               | Current Bid | Highest Bidder | Auctioner   | End Date & Time\n";
+    cout << "---------------------------------------------------------------------------------------------------------\n";
     ifstream inFileG("item.txt");
     if (!inFileG) {
         cerr << "Error: Unable to open item.txt.\n";
@@ -61,17 +58,21 @@ void viewDashboard(const string &username) {
 
         cout << ID << "   | " << itemName
                 << " | " << category
-                << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
-                << "      | " << seller
-                << " | " << asctime(localtime(&endTime));
-        
+                << "            |       " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
+                << "     |    " << highestBidder
+                << "    | " << seller
+                << "   | " << asctime(localtime(&endTime));
     }
 
     inFileG.close();
+}
 
+// Auction Dashboard Screen
+void viewDashboard(const string &username) {
+    globalAuctionScreen();
 
     cout << "\nYour active item listings:\n";
-    cout << "No. | Name      | Category      | Current Bid | Current Bidder  | End Date & Time\n";
+    cout << "ID | Name      | Category      | Current Bid | Current Bidder  | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
     ifstream inFileS("item.txt");
     if (!inFileS) {
@@ -115,7 +116,7 @@ void viewDashboard(const string &username) {
     inFileS.close();
 
     cout << "\nYour active bids:\n";
-    cout << "No. | Name      | Category      | Your Bid    | Current Bid     | End Date & Time\n";
+    cout << "ID  | Name      | Category      | Your Bid    | Auctioner       | End Date & Time\n";
     cout << "----------------------------------------------------------------------------------------\n";
     ifstream inFileH("item.txt");
     if (!inFileH) {
@@ -151,8 +152,8 @@ void viewDashboard(const string &username) {
         if (highestBidder == username) {
             cout << ID << "   | " << itemName
                  << " | " << category
-                 << "            | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
-                 << "      | " << highestBidder
+                 << "       | " << (currentBid == startingBid ? "No Bids" : to_string(currentBid))
+                 << "   | " << seller
                  << " | " << asctime(localtime(&endTime));
         }
     }
@@ -388,10 +389,25 @@ int main() {
 
         switch (userType) {
             case 1:
-                // cout << "Feature not implemented for this member type.\n";
-                activeBids();
-                break;
+                int guestChoice;
 
+                cout << "\n--------------------------\n------- Guest Menu -------\n--------------------------";
+                cout << "\nWelcome Guest user! To access full functionalities and participate in auctions, \nplease return to home screen and register as user!\n";
+
+                globalAuctionScreen();
+                cout << "\n0. Return to Home screen";
+                cout << "\nEnter your choice: ";
+                cin >> guestChoice;
+                switch(guestChoice){
+                    case 0:
+                        cout << "\nReturning to Home screen...\n";
+                        break;
+                    
+                    default:
+                        cout << "\nInvalid option!\n";
+                        break;
+                }
+                break;
             case 2: {
                 string username, password;
                 cout << "\nEnter username: ";

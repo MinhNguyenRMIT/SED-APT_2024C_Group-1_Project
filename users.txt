@@ -1,2 +1,3 @@
 da,rmit1234,Dat Pham,0901234567,dat1234@gmail.com,1231312,3,10000
 MinhNguyen,rmit2345,MinhNguyen,0901234567,minhNguyen1234@rmit.edu.vn,001234567891,5.000000,200
+hoang@123,rmit3456,HoangLe,281231234,hoang123@rmit.edu.vn,234567822,3,0.0,0
