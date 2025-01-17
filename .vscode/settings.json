@@ -97,11 +97,41 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "ios": "cpp",
+        "xfacet": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
+        "aiyesg",
+        "asdadd",
+        "asdas",
+        "asdasd",
+        "asdsad",
+        "Chong",
+        "COSC",
+        "dasdds",
+        "dassadadas",
+        "EEET",
+        "Hieu",
+        "Hoang",
+        "hoanh",
+        "Kiet",
         "Minh",
-        "minhnguyen"
+        "minhnguyen",
+        "passw",
+        "Pham",
+        "qwferfesrg",
+        "Tuan"
     ]
 }

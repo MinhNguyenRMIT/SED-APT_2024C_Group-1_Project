@@ -1,90 +1,181 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
-using namespace std;
+#include <map>
+#include <fstream>
+#include <sstream>
 
-class Item {
+class Bidding {
 private:
-    string itemName;
-    string category;
+    std::string itemName;
+    std::string category;
     double minBid;
     double currentBid;
-    string sellerUsername;
-    string highestBidder;
+    std::string sellerUsername;
+    std::string highestBidder;
     double minBuyerRating;
     bool isActive;
+    double bidIncrement;
+    std::map<std::string, double> bidLimits; // Stores buyer's bid limits
 
 public:
     // Constructor
-    Item(string name, string cat, double minB, string seller, double minRating)
-        : itemName(name), category(cat), minBid(minB), currentBid(0),
-          sellerUsername(seller), highestBidder(""), minBuyerRating(minRating), isActive(true) {}
+    Bidding(std::string name, std::string cat, double minB, std::string seller, double minRating, double increment)
+        : itemName(name), category(cat), minBid(minB), currentBid(minB),
+          sellerUsername(seller), highestBidder(""), minBuyerRating(minRating),
+          isActive(true), bidIncrement(increment) {}
 
     // Getters
-    string getItemName() const { return itemName; }
+    std::string getItemName() const { return itemName; }
     double getCurrentBid() const { return currentBid; }
-    string getHighestBidder() const { return highestBidder; }
+    std::string getHighestBidder() const { return highestBidder; }
     double getMinBuyerRating() const { return minBuyerRating; }
     bool getIsActive() const { return isActive; }
 
     // Place a bid
-    bool placeBid(string buyer, double bidAmount, double buyerCP, double buyerRating) {
+    bool placeBid(std::string buyer, double bidAmount, double buyerCP, double buyerRating) {
         if (!isActive) {
-            cout << "This item is no longer active for bidding.\n";
+            std::cout << "This item is no longer active for bidding.\n";
             return false;
         }
 
         if (buyerRating < minBuyerRating) {
-            cout << "Buyer does not meet the minimum rating threshold.\n";
+            std::cout << "Buyer does not meet the minimum rating threshold.\n";
             return false;
         }
 
         if (bidAmount <= currentBid) {
-            cout << "Bid amount must be higher than the current highest bid.\n";
+            std::cout << "Bid amount must be higher than the current highest bid.\n";
             return false;
         }
 
         if (bidAmount > buyerCP) {
-            cout << "Insufficient credit points to place this bid.\n";
+            std::cout << "Insufficient credit points to place this bid.\n";
             return false;
         }
 
         currentBid = bidAmount;
         highestBidder = buyer;
-        cout << "Bid placed successfully! Current highest bid: " << currentBid << " by " << highestBidder << "\n";
+        std::cout << "Bid placed successfully! Current highest bid: " << currentBid << " by " << highestBidder << "\n";
+
+        // Update item.txt
+        if (!updateItemFile()) {
+            cerr << "Error: Failed to update item.txt.\n";
+            return false;
+        }
+
         return true;
+    }
+
+    // Update item.txt file
+    bool updateItemFile() {
+    std::ifstream inFile("item.txt");
+    std::ofstream outFile("item_temp.txt");
+
+    if (!inFile || !outFile) {
+        std::cerr << "Error: Unable to open item.txt or create temp file.\n";
+        return false;
+    }
+
+    std::string line;
+    bool updated = false;
+
+    while (std::getline(inFile, line)) {
+        std::istringstream ss(line);
+        std::vector<std::string> fields;
+        std::string field;
+
+        while (std::getline(ss, field, ',')) {
+            fields.push_back(field);
+        }
+
+        // Check if this is the item to update
+        if (fields.size() > 1 && fields[1] == itemName) { // Use ID if names aren't unique
+            fields[7] = std::to_string(currentBid); 
+            fields[4] = highestBidder;            
+            updated = true;
+        }
+
+        // Write updated or unmodified line to the new file
+        for (size_t i = 0; i < fields.size(); ++i) {
+            outFile << fields[i];
+            if (i != fields.size() - 1) {
+                outFile << ",";
+            }
+        }
+        outFile << "\n";
+    }
+
+    inFile.close();
+    outFile.close();
+
+    // Replace the old file with the updated file
+    if (updated) {
+        std::remove("item.txt");
+        std::rename("item_temp.txt", "item.txt");
+    } else {
+        std::remove("item_temp.txt");
+        std::cerr << "Error: Item not found for update.\n";
+        return false;
+    }
+
+    return true;
+}
+
+
+    // Set bid limit
+    bool setBidLimit(std::string buyer, double limit) {
+        if (bidLimits.count(buyer) > 0) {
+            std::cout << "You already have a bid limit set.\n";
+            return false;
+        }
+
+        for (const auto& [otherBuyer, otherLimit] : bidLimits) {
+            if (otherLimit == limit) {
+                std::cout << "Bid limit conflicts with another buyer's limit. Suggested limit: " << limit + bidIncrement << "\n";
+                return false;
+            }
+        }
+
+        bidLimits[buyer] = limit;
+        std::cout << "Bid limit set successfully for " << buyer << ": " << limit << "\n";
+        return true;
+    }
+
+    // Automatically handle bids based on limits
+    void handleAutomaticBids(std::string newBidder, double newBidAmount) {
+        for (auto& [buyer, limit] : bidLimits) {
+            if (buyer != newBidder && newBidAmount + bidIncrement <= limit && newBidAmount + bidIncrement > currentBid) {
+                currentBid = newBidAmount + bidIncrement;
+                highestBidder = buyer;
+                std::cout << "Automatic bid placed for " << buyer << ": " << currentBid << "\n";
+                updateItemFile();
+                return;
+            }
+        }
+
+        std::cout << "No automatic bids placed.\n";
     }
 };
 
-int main() {
-    // Create an item
-    Item laptop("Laptop", "Electronics", 500, "JaneSeller", 3.0);
+// int main() {
+//     // Create an item
+//     Bidding item("Laptop", "Electronics", 50, "JaneSeller", 3.0, 10);
 
-    // Display initial item details
-    cout << "Item: " << laptop.getItemName() << "\n";
-    cout << "Minimum Rating Required: " << laptop.getMinBuyerRating() << "\n";
-    cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n\n";
+//     // Set bid limits
+//     item.setBidLimit("BuyerXXX", 90);
+//     item.setBidLimit("BuyerYYY", 100);
+//     item.setBidLimit("BuyerZZZ", 110);
 
-    // Simulate bidding
-    string buyer1 = "JohnBuyer";
-    double buyer1CP = 1000;  // Credit points
-    double buyer1Rating = 4.0;
+//     // Simulate bidding
+//     item.placeBid("BuyerYYY", 60, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerYYY", 60);
 
-    cout << buyer1 << " tries to place a bid of 600.\n";
-    laptop.placeBid(buyer1, 600, buyer1CP, buyer1Rating);
+//     item.placeBid("BuyerZZZ", 80, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerZZZ", 80);
 
-    string buyer2 = "AliceBuyer";
-    double buyer2CP = 700;  // Credit points
-    double buyer2Rating = 2.5;
+//     item.placeBid("BuyerWWW", 100, 1000, 4.0);
+//     item.handleAutomaticBids("BuyerWWW", 100);
 
-    cout << "\n" << buyer2 << " tries to place a bid of 700.\n";
-    laptop.placeBid(buyer2, 700, buyer2CP, buyer2Rating);
-
-    // Display updated item details
-    cout << "\nUpdated Item Details:\n";
-    cout << "Current Highest Bid: " << laptop.getCurrentBid() << "\n";
-    cout << "Highest Bidder: " << laptop.getHighestBidder() << "\n";
-
-    return 0;
-}
+//     return 0;
+// }

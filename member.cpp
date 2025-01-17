@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -25,13 +27,19 @@ class Member {
 private:
     string username;
     string password;
+    string fullName;
+    int phoneNumber;
+    string email;
+    int id;
+    int rating;
     int creditPoints;
     float rating;
     vector<Item> itemsListed;
     vector<int> itemsBid; // Store item IDs for items this member has bid on
 
 public:
-    Member(string u, string p) : username(u), password(p), creditPoints(0), rating(3.0) {}
+    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 3, int creditPoints = 0, int won = 0)
+        : username(uname), password(pwd), fullName(fname), phoneNumber(phone), email(mail), id(idNumber), rating(rate), creditPoints(creditPoints), itemsWon(won) {}
 
     // Getters
     string getUsername() const { return username; }
@@ -56,18 +64,11 @@ public:
         cout << "\n--- Dashboard ---\n";
         cout << "Credit Points: " << creditPoints << "\n";
         cout << "Rating: " << rating << "\n";
+        cout << "Credit Points: " << creditPoints << "\n";
+        cout << "Items Won: " << itemsWon << "\n";
+        cout << "-----------------------------------\n";
 
-        cout << "\nItems Listed:\n";
-        for (const auto &item : itemsListed) {
-            cout << "ID: " << item.itemID << " | Name: " << item.name
-                 << " | Highest Bid: " << item.highestBid << " | Active: "
-                 << (item.isActive ? "Yes" : "No") << "\n";
-        }
-
-        cout << "\nItems Bid On:\n";
-        for (const auto &bid : itemsBid) {
-            cout << "Item ID: " << bid << "\n";
-        }
+        cout << "\n1. Top up credits\n2. Update Proifle\n0. Exit\n";
     }
 
     // Place a bid on an item

@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-using namespace std;
+#include <fstream>
+#include <sstream>
 
-class Member {
+class Rating {
 private:
-    string username;
+    std::string username;
     double buyerRating;
     double sellerRating;
     int buyerRatingCount;
@@ -13,12 +14,12 @@ private:
 
 public:
     // Constructor
-    Member(string uname)
+    Rating(std::string uname)
         : username(uname), buyerRating(3.0), sellerRating(3.0),
           buyerRatingCount(0), sellerRatingCount(0) {}
 
     // Getters
-    string getUsername() const { return username; }
+    std::string getUsername() const { return username; }
     double getBuyerRating() const { return buyerRating; }
     double getSellerRating() const { return sellerRating; }
 
@@ -26,60 +27,106 @@ public:
     void rateBuyer(double rating) {
         buyerRating = ((buyerRating * buyerRatingCount) + rating) / (buyerRatingCount + 1);
         buyerRatingCount++;
+        updateUserFile("buyer");
     }
 
     void rateSeller(double rating) {
         sellerRating = ((sellerRating * sellerRatingCount) + rating) / (sellerRatingCount + 1);
         sellerRatingCount++;
+        updateUserFile("seller");
     }
 
-    // Display Member Info
+    // Display Member's Rating Info
     void displayRatings() const {
-        cout << username << "'s Ratings:\n";
-        cout << "  Buyer Rating: " << fixed << setprecision(2) << buyerRating << "\n";
-        cout << "  Seller Rating: " << fixed << setprecision(2) << sellerRating << "\n";
+        std::cout << username << "'s Ratings:\n";
+        std::cout << "  Buyer Rating: " << std::fixed << std::setprecision(2) << buyerRating << "\n";
+        std::cout << "  Seller Rating: " << std::fixed << std::setprecision(2) << sellerRating << "\n";
+    }
+
+    // Update users.txt file
+    void updateUserFile(const std::string& role) {
+        std::ifstream inFile("users.txt");
+        std::ofstream outFile("user_temp.txt");
+        std::string line;
+
+        while (std::getline(inFile, line)) {
+            std::istringstream ss(line);
+            std::vector<std::string> fields;
+            std::string field;
+
+            // Split the line by commas
+            while (std::getline(ss, field, ',')) {
+                fields.push_back(field);
+            }
+
+            // Check if this is the user to update
+            if (fields.size() > 1 && fields[0] == username) {
+                if (role == "buyer") {
+                    fields[6] = std::to_string(buyerRating); // Update buyer rating
+                } else if (role == "seller") {
+                    fields[6] = std::to_string(sellerRating); // Update seller rating
+                }
+            }
+
+            // Write updated line to the new file
+            for (size_t i = 0; i < fields.size(); ++i) {
+                outFile << fields[i];
+                if (i != fields.size() - 1) {
+                    outFile << ",";
+                }
+            }
+            outFile << "\n";
+        }
+
+        inFile.close();
+        outFile.close();
+
+        // Replace the old file with the updated file
+        std::remove("users.txt");
+        std::rename("user_temp.txt", "users.txt");
     }
 };
 
-int main() {
-    // Create two members
-    Member seller("JaneSeller");
-    Member buyer("JohnBuyer");
 
-    cout << "Initial Ratings:\n";
-    seller.displayRatings();
-    buyer.displayRatings();
+// int main() {
+//     // Example usage
+//     Rating seller("JaneSeller");
+//     Rating buyer("JohnBuyer");
 
-    // Simulate a transaction
-    cout << "\nTransaction Completed!\n";
-    cout << "Both parties can rate each other (1-5).\n";
+//     std::cout << "Initial Ratings:\n";
+//     seller.displayRatings();
+//     buyer.displayRatings();
 
-    double sellerToBuyerRating, buyerToSellerRating;
+//     // Simulate a transaction
+//     std::cout << "\nTransaction Completed!\n";
+//     std::cout << "Both parties can rate each other (1-5).\n";
 
-    // Input seller rating the buyer
-    cout << "Seller rates Buyer (1-5): ";
-    cin >> sellerToBuyerRating;
-    while (sellerToBuyerRating < 1 || sellerToBuyerRating > 5) {
-        cout << "Invalid rating. Please rate between 1 and 5: ";
-        cin >> sellerToBuyerRating;
-    }
+//     double sellerToBuyerRating, buyerToSellerRating;
 
-    // Input buyer rating the seller
-    cout << "Buyer rates Seller (1-5): ";
-    cin >> buyerToSellerRating;
-    while (buyerToSellerRating < 1 || buyerToSellerRating > 5) {
-        cout << "Invalid rating. Please rate between 1 and 5: ";
-        cin >> buyerToSellerRating;
-    }
+//     // Input seller rating the buyer
+//     std::cout << "Seller rates Buyer (1-5): ";
+//     std::cin >> sellerToBuyerRating;
+//     while (sellerToBuyerRating < 1 || sellerToBuyerRating > 5) {
+//         std::cout << "Invalid rating. Please rate between 1 and 5: ";
+//         std::cin >> sellerToBuyerRating;
+//     }
 
-    // Update ratings
-    seller.rateBuyer(sellerToBuyerRating);
-    buyer.rateSeller(buyerToSellerRating);
+//     // Input buyer rating the seller
+//     std::cout << "Buyer rates Seller (1-5): ";
+//     std::cin >> buyerToSellerRating;
+//     while (buyerToSellerRating < 1 || buyerToSellerRating > 5) {
+//         std::cout << "Invalid rating. Please rate between 1 and 5: ";
+//         std::cin >> buyerToSellerRating;
+//     }
 
-    // Display updated ratings
-    cout << "\nUpdated Ratings:\n";
-    seller.displayRatings();
-    buyer.displayRatings();
+//     // Update ratings
+//     seller.rateBuyer(sellerToBuyerRating);
+//     buyer.rateSeller(buyerToSellerRating);
 
-    return 0;
-}
+//     // Display updated ratings
+//     std::cout << "\nUpdated Ratings:\n";
+//     seller.displayRatings();
+//     buyer.displayRatings();
+
+//     return 0;
+// }

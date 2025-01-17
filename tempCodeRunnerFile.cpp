@@ -1,0 +1,1 @@
+item* loadedItem = loadItem(itemId);
