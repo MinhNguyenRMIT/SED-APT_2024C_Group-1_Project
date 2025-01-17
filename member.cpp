@@ -17,19 +17,19 @@ private:
     int phoneNumber;
     string email;
     int id;
-    int rating;
+    double rating;
     int creditPoints;
     int itemsWon;
 
 public:
-    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, int rate = 3, int creditPoints = 0, int won = 0)
+    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, double rate = 3.0, int creditPoints = 0, int won = 0)
         : username(uname), password(pwd), fullName(fname), phoneNumber(phone), email(mail), id(idNumber), rating(rate), creditPoints(creditPoints), itemsWon(won) {}
 
     string getMemberName() const { return username; }
     string getPassword() const { return password; }
     string getFullName() const { return fullName; }
     string getEmail() const { return email; }
-    int getRating() const { return rating; }
+    double getRating() const { return rating; }
     int getPhoneNumber() const { return phoneNumber; }
     int getCreditPoints() const { return creditPoints; }
     int getItemsWon() const { return itemsWon; }
@@ -39,7 +39,7 @@ public:
     void setFullName(const string &fname) { fullName = fname; }
     void setPhoneNumber(int phone) { phoneNumber = phone; }
     void setEmail(const string &mail) { email = mail; }
-    void setRating(int rate) { rating = rate; }
+    void setRating(double rate) { rating = rate; }
     void setCreditPoints(int points) { creditPoints = points; }
     void setItemsWon(int won) { itemsWon = won; }
 
@@ -147,10 +147,13 @@ void registerUser() {
     cout << "Enter ID Number: ";
     cin >> idNumber;
 
+    // Saving user information into text file 
+    // NOTE: PLEASE REVIEW which type of file is used to save user information
+    // >>> txt file as data file
     // Write new user data into file
     ofstream outFile("users.txt", ios::app);
     if (outFile) {
-        outFile << uname << "," << pwd << "," << fname << "," << phone << "," << mail << "," << idNumber << ",3,0.0,0\n";
+        outFile << uname << "," << pwd << "," << fname << "," << phone << "," << mail << "," << idNumber << ",3.0,0,0\n";
         cout << "Registration successful!\n";
     } else {
         cerr << "Error: Unable to save member information to file.\n";

@@ -210,7 +210,7 @@ void viewDashboard(const string &username) {
             cout << "\nEnter Your bid amount: ";
             cin >> bidAmount;
 
-            // Load item details
+            // Load item
             item* loadedItem = loadItem(newItemId);
             if (loadedItem) {
                 // Create a Bidding instance with the item's attributes
@@ -220,7 +220,7 @@ void viewDashboard(const string &username) {
                     loadedItem->getStartingBid(),
                     loadedItem->getSeller(),
                     loadedItem->getMinBuyerRating(),
-                    10.0 //temp bid increment value
+                    10.0 //bid increment value
                 );
 
                 // Attempt to place a bid using the Bidding instance
@@ -245,9 +245,9 @@ void viewDashboard(const string &username) {
         case 5:{
             double rating;
             string buyer;
-            cout << "Enter Buyer's Username: ";
+            cout << "Enter Bidder's Username: ";
             cin >> buyer;
-            cout << "Rate the Buyer (1-5): ";
+            cout << "Rate the Bidder (1-5): ";
             cin >> rating;
             while (rating < 1 || rating > 5) {
                 cout << "Invalid rating. Please rate between 1 and 5: ";
@@ -255,16 +255,16 @@ void viewDashboard(const string &username) {
             }
             Rating buyerRating(buyer);
             buyerRating.rateBuyer(rating);
-            cout << "Buyer has been rated successfully!\n";
+            cout << "Bidder has been rated!\n";
             break;
         }
 
-        case 6:{
+        case 6: {
             double rating;
             string seller;
-            cout << "Enter Seller's Username: ";
+            cout << "Enter Auctioner's Username: ";
             cin >> seller;
-            cout << "Rate the Seller (1-5): ";
+            cout << "Rate the Auctioner (1-5): ";
             cin >> rating;
             while (rating < 1 || rating > 5) {
                 cout << "Invalid rating. Please rate between 1 and 5: ";
@@ -272,7 +272,7 @@ void viewDashboard(const string &username) {
             }
             Rating sellerRating(seller);
             sellerRating.rateSeller(rating);
-            cout << "Seller has been rated successfully!\n";
+            cout << "Auctioner has been rated!\n";
             break;
         }
 
@@ -379,7 +379,7 @@ void handleMember(Member &member) {
     } while (choice != 5);
 }
 
-// NEW TEST MAIN
+// Main Method, handles all other screen methods
 int main() {
     int userType;
     
