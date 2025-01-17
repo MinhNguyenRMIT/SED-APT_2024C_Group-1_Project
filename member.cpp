@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 class Member {
 private:
     string username;
@@ -17,12 +16,12 @@ private:
     int phoneNumber;
     string email;
     int id;
-    double rating;
+    float rating;
     int creditPoints;
     int itemsWon;
 
 public:
-    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, double rate = 3.0, int creditPoints = 0, int won = 0)
+    Member(string uname = "", string pwd = "", string fname = "", int phone = 0, string mail = "", int idNumber = 0, float rate = 3.0, int creditPoints = 0, int won = 0)
         : username(uname), password(pwd), fullName(fname), phoneNumber(phone), email(mail), id(idNumber), rating(rate), creditPoints(creditPoints), itemsWon(won) {}
 
     string getMemberName() const { return username; }
@@ -75,7 +74,8 @@ Member* loadUser(const string &username, const string &password) {
         // Load current user based on their logged in credentials
         if (uname == username && pwd == password) {
             string fullName, email;
-            int idNumber, phoneNumber, rating, creditPoints, itemsWon;
+            double rating;
+            int idNumber, phoneNumber, creditPoints, itemsWon;
 
             getline(ss, fullName, ',');
             ss >> phoneNumber;
@@ -83,13 +83,12 @@ Member* loadUser(const string &username, const string &password) {
             getline(ss, email, ',');
             ss >> idNumber;
             ss.ignore();  
-            ss >> rating;
+            ss >> rating; 
             ss.ignore();  
             ss >> creditPoints;
             ss.ignore();  
             ss >> itemsWon;
 
-            inFile.close();
             return new Member(uname, pwd, fullName, phoneNumber, email, idNumber, rating, creditPoints, itemsWon);
         }
     }
@@ -263,4 +262,3 @@ void topUpCredits(Member member) {
     member.setCreditPoints(currCP);
     cout << "Successfully added 1 credit point.\n";
 }
-

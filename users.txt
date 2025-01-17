@@ -1,3 +1,5 @@
 da,rmit1234,DatPham,0901234567,dat1234@gmail.com,1231312,4.000000,1000
 MinhNguyen,rmit2345,MinhNguyen,0901234567,minhNguyen1234@rmit.edu.vn,001234567891,5.000000,200
 hoang@123,rmit3456,HoangLe,281231234,hoang123@rmit.edu.vn,234567822,5.000000,500
+Kiet,rmit5678,KietLe,91231234,kiet123@rmit.edu.vn,1231234,5.000000,1000,0
+Guest123,iam@guest,GuestUser,929203932,guestUser@gmail.com,1231234,3.0,0,0

@@ -186,12 +186,6 @@ void item::concludeAuction(item i){
     };
 };
 
-// void item::concludeAuction(item i) {
-//     if (localtime(&current_time) == localtime(&i.endTime)) {
-//         cout << "Auction has ended" << endl;
-//     }
-// }
-
 void viewBidding() {
     ifstream file("item.txt");
     if (file.is_open()) {
@@ -235,12 +229,12 @@ void activeBids() {
             ss >> endTime;
             ss.ignore();
             ss >> startTime;
-                if (difftime(endTime, std::time(nullptr)) > 0) {
-                    string itemId;
-                    item* loadedItem = loadItem(itemId);
-                    if (loadedItem) {
-                            loadedItem->viewBidding(); 
-                        delete loadedItem;        
+            if (difftime(endTime, std::time(nullptr)) > 0) {
+                string itemId;
+                item* loadedItem = loadItem(itemId);
+                if (loadedItem) {
+                        loadedItem->viewBidding(); 
+                    delete loadedItem;        
                 }
             }
         }
@@ -249,20 +243,3 @@ void activeBids() {
         cout << "Error opening file" << endl;
     }
 }
-
-// int main()
-// {
-//     // item zero("0","0","0","0","0","0",0,0,0,0,0);
-//     item aiyesg("2","item2","category2","description2","bidder2","bidder1",200,200,3,1610000000,1600000000);
-//     // item item3("3","item3","category3","description3","bidder3","bidder4",300,300,2,1610000000,1600000000);
-    
-//     aiyesg.addBid("bidder5", 250, 4, "3");   
-//     // item3.addBid("bidder6", 350, 3, "2");
-//     // aiyesg.updateListing(aiyesg);
-//     // item3.updateListing(item3);
-
-//     // zero.viewBidding();
-//     aiyesg.viewBidding();
-    
-//     return 0;
-// }

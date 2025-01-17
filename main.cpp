@@ -161,7 +161,7 @@ void viewDashboard(const string &username) {
     inFileH.close();
 
     int choice;
-    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. View Ratings\n5. Rate a Buyer\n6. Rate a Seller\n7. Return to Main Menu\n";
+    cout << "\n1. View Item Listing Details\n2. View Active Bid Details\n3. Place a Bid\n4. View Ratings\n5. Rate an Auctioner\n6. Rate a Bidder\n7. Return to Main Menu\n";
     cout << "Enter your choice: ";
     cin >> choice;
 

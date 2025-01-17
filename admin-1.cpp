@@ -49,7 +49,6 @@ void readItems() {
     itemsFile.close();
 }
 
-
 const string Admin::adminUser = "admin";
 const string Admin::adminPass = "admin";
 
@@ -90,7 +89,3 @@ void adminView() {
         cout << "Access Denied.\n";
     }
 }
-
-// int main(){
-//     adminView();
-// }
