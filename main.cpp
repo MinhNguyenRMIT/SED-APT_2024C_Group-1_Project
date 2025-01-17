@@ -104,19 +104,20 @@ void viewDashboard(const string &username) {
 
         case 2: {
             cout << "Enter the number of the bid to view details: ";
+            activeBids();
             break;
         }
 
         case 3: {
             cout << "Bidding!\n";
 
-            string currBidderName, newItemId, passw;
+            string currBidderName, newItemId, pass;
             int bidAmount, rate;
 
             cout << "Please re-enter your Password: ";
-            cin >> passw;
+            cin >> pass;
 
-            Member* loadedMember = loadUser(username, passw);
+            Member* loadedMember = loadUser(username, pass);
             if (!loadedMember) {
                 cout << "Invalid password or user not found.\n";
                 break;
@@ -223,7 +224,7 @@ void handleMember(Member &member) {
                 cout << "Enter Minimum Buyer Rating: ";
                 cin >> minBuyerRating;
                 cout << "Enter bid length in days: ";
-                cin >> endTime;
+                cin >> endTime;// just around 1737079211
                 cout << "Enter start time in days: ";
                 cin >> startTime;
 
@@ -268,7 +269,8 @@ int main() {
 
         switch (userType) {
             case 1:
-                cout << "Feature not implemented for this member type.\n";
+                // cout << "Feature not implemented for this member type.\n";
+                activeBids();
                 break;
 
             case 2: {

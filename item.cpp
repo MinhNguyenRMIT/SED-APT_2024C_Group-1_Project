@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <sstream>
 using namespace std;
 #include "item.h"
 
@@ -85,7 +86,7 @@ item* loadItem(const string &itemId) {
             ss >> startTime;
 
             inFile.close();
-            return new item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime, startTime);
+            return new item(ID, itemName, category, description, highestBidder, seller, startingBid, currentBid, minBuyerRating, endTime+time(nullptr), startTime);
         }
     }
 
@@ -136,6 +137,50 @@ void viewBidding() {
         string line;
         while (getline(file, line)) {
             cout << line << endl;
+        }
+        file.close();
+    } else {
+        cout << "Error opening file" << endl;
+    }
+}
+void activeBids() {
+    time_t current_time;
+    time(&current_time);
+std::time(nullptr)  ;  
+ifstream file("item.txt");
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+        stringstream ss(line);
+        string ID, itemName, category, description, highestBidder, seller;
+        int startingBid, currentBid, minBuyerRating;
+        time_t endTime, startTime;
+
+        // Parse the line
+        getline(ss, ID, ',');
+        
+        getline(ss, itemName, ',');
+        getline(ss, category, ',');
+        getline(ss, description, ',');
+        getline(ss, highestBidder, ',');
+        getline(ss, seller, ',');
+        ss >> startingBid;
+        ss.ignore();
+        ss >> currentBid;
+        ss.ignore();
+        ss >> minBuyerRating;
+        ss.ignore();
+        ss >> endTime;
+        ss.ignore();
+        ss >> startTime;
+            if (difftime(endTime, std::time(nullptr)) > 0) {
+                string itemId;
+                item* loadedItem = loadItem(itemId);
+                if (loadedItem) {
+                        loadedItem->viewBidding(); 
+                    delete loadedItem;        
+            }
+            }
         }
         file.close();
     } else {
